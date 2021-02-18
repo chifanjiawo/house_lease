@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.house.demo.dao.HouseCommentMapper">
+  <resultMap id="BaseResultMap" type="com.house.demo.model.HouseComment">
+    <!--@mbg.generated-->
+    <!--@Table house_comment-->
+    <id column="comment_id" jdbcType="INTEGER" property="commentId" />
+    <result column="comment_pid" jdbcType="INTEGER" property="commentPid" />
+    <result column="comment_house_id" jdbcType="BIGINT" property="commentHouseId" />
+    <result column="comment_author_id" jdbcType="INTEGER" property="commentAuthorId" />
+    <result column="comment_author_name" jdbcType="VARCHAR" property="commentAuthorName" />
+    <result column="comment_author_avatar" jdbcType="VARCHAR" property="commentAuthorAvatar" />
+    <result column="comment_content" jdbcType="LONGVARCHAR" property="commentContent" />
+    <result column="comment_create_time" jdbcType="TIMESTAMP" property="commentCreateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    comment_id, comment_pid, comment_house_id, comment_author_id, comment_author_name, 
+    comment_author_avatar, comment_content, comment_create_time
+  </sql>
+</mapper>

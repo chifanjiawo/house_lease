@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.house.demo.dao.HouseOrderMapper">
+  <resultMap id="BaseResultMap" type="com.house.demo.model.HouseOrder">
+    <!--@mbg.generated-->
+    <!--@Table house_order-->
+    <id column="house_id" jdbcType="BIGINT" property="houseId" />
+    <result column="house_user_id" jdbcType="INTEGER" property="houseUserId" />
+    <result column="house_type" jdbcType="VARCHAR" property="houseType" />
+    <result column="house_orientation" jdbcType="VARCHAR" property="houseOrientation" />
+    <result column="house_area" jdbcType="LONGVARCHAR" property="houseArea" />
+    <result column="house_cost" jdbcType="LONGVARCHAR" property="houseCost" />
+    <result column="house_payment" jdbcType="VARCHAR" property="housePayment" />
+    <result column="house_rent_include" jdbcType="VARCHAR" property="houseRentInclude" />
+    <result column="house_early_time" jdbcType="TIMESTAMP" property="houseEarlyTime" />
+    <result column="house_num" jdbcType="TINYINT" property="houseNum" />
+    <result column="house_decoration" jdbcType="VARCHAR" property="houseDecoration" />
+    <result column="house_lease_type" jdbcType="VARCHAR" property="houseLeaseType" />
+    <result column="house_address" jdbcType="VARCHAR" property="houseAddress" />
+    <result column="house_furniture" jdbcType="VARCHAR" property="houseFurniture" />
+    <result column="house_desc" jdbcType="LONGVARCHAR" property="houseDesc" />
+    <result column="house_require" jdbcType="VARCHAR" property="houseRequire" />
+    <result column="house_release_time" jdbcType="TIMESTAMP" property="houseReleaseTime" />
+    <result column="house_picture_url" jdbcType="VARCHAR" property="housePictureUrl" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    house_id, house_user_id, house_type, house_orientation, house_area, house_cost, house_payment, 
+    house_rent_include, house_early_time, house_num, house_decoration, house_lease_type, 
+    house_address, house_furniture, house_desc, house_require, house_release_time, house_picture_url
+  </sql>
+</mapper>
