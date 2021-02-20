@@ -4,18 +4,16 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-
-import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
 
 /**
- * @author mac
+ * @author xjj
  */
 @Data
 @TableName(value = "house_user")
-public class HouseUser implements Serializable {
-
+public class HouseUser {
+    public static final String COL_USER_ROLE = "user_role";
     private static final long serialVersionUID = 5636524409799996936L;
     @TableId(value = "user_id", type = IdType.AUTO)
     private Integer userId;
@@ -38,8 +36,8 @@ public class HouseUser implements Serializable {
     @TableField(value = "user_register_time")
     private Date userRegisterTime;
 
-    @TableField(value = "user_role")
-    private Byte userRole;
+    @TableField(value = "role")
+    private String role;
 
     public static final String COL_USER_ID = "user_id";
 
@@ -55,5 +53,5 @@ public class HouseUser implements Serializable {
 
     public static final String COL_USER_REGISTER_TIME = "user_register_time";
 
-    public static final String COL_USER_ROLE = "user_role";
+    public static final String COL_ROLE = "role";
 }

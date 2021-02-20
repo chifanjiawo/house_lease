@@ -13,19 +13,7 @@ class DemoApplicationTests {
     @Test
     void contextLoads() {
 
-        HouseUser user = new HouseUser();
 
-        user.setUserId(1);
-        user.setUserName("xjj");
-
-
-        String s = JSONObject.toJSONString(user);
-
-        System.out.println(s);
-
-        HouseUser object = JSONObject.parseObject(s,HouseUser.class);
-
-        System.out.println(object);
 
     }
 

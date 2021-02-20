@@ -11,11 +11,21 @@
     <result column="user_tel" jdbcType="VARCHAR" property="userTel" />
     <result column="user_avatar" jdbcType="VARCHAR" property="userAvatar" />
     <result column="user_register_time" jdbcType="TIMESTAMP" property="userRegisterTime" />
-    <result column="user_role" jdbcType="TINYINT" property="userRole" />
+    <result column="role" jdbcType="VARCHAR" property="role" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     user_id, user_name, user_password, user_last_login_time, user_tel, user_avatar, user_register_time, 
-    user_role
+    `role`
   </sql>
+
+    <select id="getUserRoleByName" parameterType="java.lang.String" resultType="java.lang.String">
+        select role from house_user where user_name = #{username};
+    </select>
+
+    <select id="getPassWordByName" parameterType="java.lang.String" resultType="java.lang.String">
+        select user_password from house_user where user_name = #{username};
+    </select>
+
+
 </mapper>
