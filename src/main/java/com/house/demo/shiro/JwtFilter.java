@@ -3,7 +3,8 @@ package com.house.demo.shiro;
 import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.house.demo.common.response.MyResult;
-import com.house.demo.common.utils.JwtUtil;
+import com.house.demo.common.utils.JwtTokenUtil;
+
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
@@ -23,7 +24,8 @@ import java.io.IOException;
 public class JwtFilter extends AuthenticatingFilter {
 
     @Autowired
-    JwtUtil jwtUtil;
+    JwtTokenUtil jwtTokenUtil;
+
 
     @Override
     protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e, ServletRequest request, ServletResponse response) {
@@ -44,6 +46,11 @@ public class JwtFilter extends AuthenticatingFilter {
     }
 
     @Override
+    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
+        return super.isAccessAllowed(request, response, mappedValue);
+    }
+
+    @Override
     protected AuthenticationToken createToken(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
@@ -61,19 +68,19 @@ public class JwtFilter extends AuthenticatingFilter {
     @Override
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
 
-        HttpServletRequest request = (HttpServletRequest) servletRequest;
-
-        String s = request.getHeader("Authorization");
-
-        if(StringUtils.isEmpty(s)){
-            return true;
-        }else {
 
 
+    }
 
-
-        }
-
-        return executeLogin(servletRequest,servletResponse);
+    @Override
+    protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
+        
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        String token = httpServletRequest.getHeader("Token");
+        JwtToken jwtToken = new JwtToken(token);
+        // 提交给realm进行登入，如果错误他会抛出异常并被捕获
+        getSubject(request, response).login(jwtToken);
+        // 如果没有抛出异常则代表登入成功，返回true
+        return true;
     }
 }

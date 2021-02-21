@@ -8,4 +8,7 @@ import com.house.demo.model.HouseUser;
  */
 public interface HouseUserMapper extends BaseMapper<HouseUser> {
 
+    String getUserRoleByName(String username);
+
+    String getPassWordByName(String username);
 }

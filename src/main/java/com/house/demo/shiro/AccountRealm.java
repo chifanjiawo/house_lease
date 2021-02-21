@@ -24,6 +24,11 @@ public class AccountRealm extends AuthorizingRealm {
 
 
     @Override
+    public boolean supports(AuthenticationToken token) {
+        return token instanceof JwtToken;
+    }
+
+    @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
 
         System.out.println("————身份认证方法————");
