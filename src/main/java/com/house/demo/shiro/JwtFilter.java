@@ -1,9 +1,9 @@
 package com.house.demo.shiro;
 
-import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSONObject;
+import com.house.demo.common.AuthConstant;
 import com.house.demo.common.response.MyResult;
-import com.house.demo.common.utils.JwtTokenUtil;
+import com.house.demo.common.utils.JwtUtil;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -15,7 +15,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
 
 /**
  * @author xjj
@@ -23,64 +23,55 @@ import java.io.IOException;
 @Component
 public class JwtFilter extends AuthenticatingFilter {
 
+
     @Autowired
-    JwtTokenUtil jwtTokenUtil;
+    JwtUtil jwtUtil;
 
-
-    @Override
-    protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e, ServletRequest request, ServletResponse response) {
-
-        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        Throwable throwable = e.getCause()== null ? e : e.getCause();
-
-        MyResult fail = MyResult.fail(throwable.getMessage());
-
-        String json = JSONObject.toJSONString(fail);
-
-        try {
-            httpServletResponse.getWriter().print(json);
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        return super.onLoginFailure(token, e, request, response);
-    }
 
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
-        return super.isAccessAllowed(request, response, mappedValue);
-    }
 
-    @Override
-    protected AuthenticationToken createToken(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
 
-        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        String token = httpServletRequest.getHeader("Token");
 
-        String s = request.getHeader("Authorization");
-
-        if(StringUtils.isEmpty(s)){
-            return null;
+        if(token!=null){
+                executeLogin(request,response);
+                return true;
         }
+        return false;
 
-
-        return new JwtToken(s);
     }
 
     @Override
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
 
+        HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
+        httpServletResponse.setContentType("application/json; charset=utf-8");
+        httpServletResponse.setCharacterEncoding("UTF-8");
+        httpServletResponse.getWriter().print(JSONObject.toJSONString(MyResult.fail(AuthConstant.AUTHENTICATE_FAIL)));
 
-
+        return false;
     }
 
+
     @Override
-    protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
-        
+    protected boolean executeLogin(ServletRequest request, ServletResponse response) throws AuthenticationException {
+
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String token = httpServletRequest.getHeader("Token");
+
         JwtToken jwtToken = new JwtToken(token);
         // 提交给realm进行登入，如果错误他会抛出异常并被捕获
         getSubject(request, response).login(jwtToken);
         // 如果没有抛出异常则代表登入成功，返回true
         return true;
+    }
+
+    @Override
+    protected AuthenticationToken createToken(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
+
+
+        return null;
     }
 }

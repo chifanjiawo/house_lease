@@ -1,5 +1,6 @@
 package com.house.demo.common.utils;
 
+import com.house.demo.common.AuthConstant;
 import com.house.demo.model.HouseUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -16,15 +17,13 @@ import java.util.*;
  * @author xjj
  */
 @Component
+public class JwtUtil {
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtil.class);
 
-public class JwtTokenUtil {
-    private static final Logger LOGGER = LoggerFactory.getLogger(JwtTokenUtil.class);
     private static final String CLAIM_KEY_USERNAME = "sub";
     private static final String CLAIM_KEY_CREATED = "created";
-    @Value("${jwt.secret}")
-    private String secret;
-    @Value("${jwt.expiration}")
-    private Long expiration;
+    private String secret="f4e2e52034348f86b67cde581c0f9eb5";
+    private Long expiration=AuthConstant.EXPIRE_TIME;
 
     /**
      * 根据负责生成JWT的token
@@ -57,7 +56,7 @@ public class JwtTokenUtil {
      * 生成token的过期时间
      */
     private Date generateExpirationDate() {
-        return new Date(System.currentTimeMillis() + expiration * 1000);
+        return new Date(System.currentTimeMillis() + expiration);
     }
 
     /**
@@ -88,7 +87,7 @@ public class JwtTokenUtil {
     /**
      * 判断token是否已经失效
      */
-    private boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         Date expiredDate = getExpiredDateFromToken(token);
         return expiredDate.before(new Date());
     }
@@ -126,5 +125,31 @@ public class JwtTokenUtil {
         claims.put(CLAIM_KEY_CREATED, new Date());
         return generateToken(claims);
     }
+
+    public static void main(String[] args) {
+        HouseUser user = new HouseUser();
+
+        user.setUserName("xiao");
+
+
+        JwtUtil jwtUtil = new JwtUtil();
+
+//        String s = jwtUtil.generateToken(user);
+
+
+//        System.out.println(s);
+
+        System.out.println(jwtUtil.validateToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ4aWFvIiwiY3JlYXRlZCI6MTYxMzk5NTc2MjQ4MSwiZXhwIjoxNjEzOTk3MjAyfQ.MOFyQOpWPC9o3bUgn18dFjizcavgV2yD5v7zSl-TP8yl5p1bM75Uw8AKc6DAXsPPedVNgX2jkYvAleerTvPiXw", user));
+        System.out.println(jwtUtil.getUserNameFromToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ4aWFvIiwiY3JlYXRlZCI6MTYxMzk5NTc2MjQ4MSwiZXhwIjoxNjEzOTk3MjAyfQ.MOFyQOpWPC9o3bUgn18dFjizcavgV2yD5v7zSl-TP8yl5p1bM75Uw8AKc6DAXsPPedVNgX2jkYvAleerTvPiXw"));
+
+
+//        System.out.println(jwtUtil.validateToken(s, user));
+
+
+    }
+
 }
+
+
+
 

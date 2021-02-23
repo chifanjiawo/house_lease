@@ -21,17 +21,32 @@ spring:
       min-evictable-idle-time-millis: 30000
       filters: stat
       async-init: true
+  redis:
+    host: 8.129.230.225
+    port: 6379
+    database: 0
+
 
 mybatis-plus:
-  mapper-locations: classpath:/mapper/*Mapper.xml
+  mapper-locations: classpath:mapper/*Mapper.xml
   type-aliases-package: com.house.demo.model
   configuration:
     cache-enabled: false
     map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   check-config-location: true
 
 
-shiro.redis
+logging:
+
+  config: classpath:logback-spring.xml
+
+
+
+
+
+
+
 
 
 

@@ -1,27 +1,33 @@
 package com.house.demo.shiro;
 
+
+import com.house.demo.common.AuthConstant;
+import com.house.demo.common.utils.JwtUtil;
 import com.house.demo.dao.HouseUserMapper;
-import org.apache.shiro.SecurityUtils;
+import com.house.demo.model.HouseUser;
+import lombok.extern.slf4j.Slf4j;
+
+
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.authz.SimpleAuthorizationInfo;
+
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author xjj
  */
-@Component
+@Slf4j
+
 public class AccountRealm extends AuthorizingRealm {
 
     @Autowired
-    HouseUserMapper userMapper;
+    JwtUtil jwtUtil;
 
+    @Autowired
+    HouseUserMapper userMapper;
 
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -31,35 +37,44 @@ public class AccountRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
 
-        System.out.println("————身份认证方法————");
-        UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
-        // 从数据库获取对应用户名密码的用户
-        String password = userMapper.getPassWordByName(token.getUsername());
-        if (null == password) {
-            throw new AccountException("用户名不正确");
-        } else if (!password.equals(new String((char[]) token.getCredentials()))) {
-            throw new AccountException("密码不正确");
+        log.info("执行认证逻辑");
+
+        String token = (String) authenticationToken.getPrincipal();
+
+        String userName = jwtUtil.getUserNameFromToken(token);
+
+        if(userName==null){
+            throw new AuthenticationException(AuthConstant.TOKEN_BLANK);
         }
-        return new SimpleAuthenticationInfo(token.getPrincipal(), password, getName());
+
+        HouseUser user = userMapper.getUserByName(userName);
+
+        if(user==null){
+            throw new AuthenticationException(AuthConstant.TOKEN_INVALID);
+        }else if(!(jwtUtil.validateToken(token,user))){
+            throw new AuthenticationException(AuthConstant.TOKEN_EXPIRE);
+        }
+
+        return new SimpleAuthenticationInfo(userName, token, "auth_realm");
     }
 
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
 
-        System.out.println("————权限认证————");
-        String username = (String) SecurityUtils.getSubject().getPrincipal();
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        //获得该用户角色
-        String role = userMapper.getUserRoleByName(username);
-        Set<String> set = new HashSet<>();
-        //需要将 role 封装到 Set 作为 info.setRoles() 的参数
-        set.add(role);
-        //设置该用户拥有的角色
-        info.setRoles(set);
+//        log.info("用户角色权限认证");
+//
+//
+//        Object o = principalCollection.getPrimaryPrincipal();
+//        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+//
+//        return info;
+
+        String principal = (String) principalCollection.getPrimaryPrincipal();
 
 
-        return info;
+        System.out.println("这是调用"+principal);
+        return null;
 
     }
 }

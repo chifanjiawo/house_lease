@@ -3,11 +3,18 @@ package com.house.demo.config;
 
 import com.house.demo.shiro.AccountRealm;
 import com.house.demo.shiro.JwtFilter;
+import com.house.demo.shiro.cache.RedisCacheManage;
+import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
+import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import sun.misc.Cache;
 
 import javax.servlet.Filter;
 import java.util.HashMap;
@@ -51,17 +58,32 @@ public class ShiroConfig {
 //        return shiroFilterFactoryBean;
 //    }
 
+
+
     /**
      * 注入 securityManager
      */
     @Bean
-    public SecurityManager securityManager() {
+    public DefaultWebSecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        // 设置realm.
         securityManager.setRealm(accountRealm());
         return securityManager;
     }
 
+
+    @Bean("lifecycleBeanPostProcessor")
+    //管理shiro生命周期
+    public static LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
+        return new LifecycleBeanPostProcessor();
+    }
+
+    //Shiro注解支持
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
+        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+        return authorizationAttributeSourceAdvisor;
+    }
     /**
      * 自定义身份认证 realm;
      * <p>
@@ -70,11 +92,20 @@ public class ShiroConfig {
      */
     @Bean
     public AccountRealm accountRealm() {
-        return new AccountRealm();
+
+        AccountRealm accountRealm = new AccountRealm();
+
+        accountRealm.setCacheManager(new RedisCacheManage());
+        accountRealm.setCachingEnabled(true);
+        accountRealm.setAuthenticationCachingEnabled(true);
+        accountRealm.setAuthorizationCachingEnabled(true);
+        accountRealm.setAuthenticationCacheName("authenticationCache");
+        accountRealm.setAuthorizationCacheName("authorizationCache");
+        return accountRealm;
     }
 
     @Bean
-    public ShiroFilterFactoryBean factory(SecurityManager securityManager) {
+    public ShiroFilterFactoryBean factory(DefaultWebSecurityManager securityManager) {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
 
         // 添加自己的过滤器并且取名为jwt
@@ -84,12 +115,31 @@ public class ShiroConfig {
         factoryBean.setFilters(filterMap);
         factoryBean.setSecurityManager(securityManager);
         Map<String, String> filterRuleMap = new HashMap<>();
+        filterRuleMap.put("/user/**","anon");
+        filterRuleMap.put("/unauthorized/**", "anon");
         // 所有请求通过我们自己的JWT Filter
         filterRuleMap.put("/**", "jwt");
+
         // 访问 /unauthorized/** 不通过JWTFilter
-        filterRuleMap.put("/unauthorized/**", "anon");
+
         factoryBean.setFilterChainDefinitionMap(filterRuleMap);
+
+        factoryBean.setLoginUrl("/user/test");
+
         return factoryBean;
     }
+
+
+
+    @Bean
+    public ShiroFilterChainDefinition shiroFilterChainDefinition(){
+        return new ShiroFilterChainDefinition() {
+            @Override
+            public Map<String, String> getFilterChainMap() {
+                return null;
+            }
+        };
+    }
+
 
 }

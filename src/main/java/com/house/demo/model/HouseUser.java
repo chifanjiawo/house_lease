@@ -13,8 +13,9 @@ import lombok.Data;
 @Data
 @TableName(value = "house_user")
 public class HouseUser {
-    public static final String COL_USER_ROLE = "user_role";
+
     private static final long serialVersionUID = 5636524409799996936L;
+
     @TableId(value = "user_id", type = IdType.AUTO)
     private Integer userId;
 
@@ -36,8 +37,11 @@ public class HouseUser {
     @TableField(value = "user_register_time")
     private Date userRegisterTime;
 
-    @TableField(value = "role")
-    private String role;
+    @TableField(value = "user_role")
+    private String userRole;
+
+    @TableField(value = "user_ban_status")
+    private Byte userBanStatus;
 
     public static final String COL_USER_ID = "user_id";
 
@@ -53,5 +57,7 @@ public class HouseUser {
 
     public static final String COL_USER_REGISTER_TIME = "user_register_time";
 
-    public static final String COL_ROLE = "role";
+    public static final String COL_USER_ROLE = "user_role";
+
+    public static final String COL_USER_BAN_STATUS = "user_ban_status";
 }
