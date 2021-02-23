@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/index")
-@Request
+
 public class IndexController {
 
     @GetMapping("/test")
