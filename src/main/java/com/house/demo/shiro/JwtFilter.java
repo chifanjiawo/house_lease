@@ -3,8 +3,10 @@ package com.house.demo.shiro;
 import com.alibaba.fastjson.JSONObject;
 import com.house.demo.common.AuthConstant;
 import com.house.demo.common.response.MyResult;
+import com.house.demo.common.utils.ApplicationContextUtil;
 import com.house.demo.common.utils.JwtUtil;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
@@ -20,25 +22,36 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @author xjj
  */
-@Component
+
+@Slf4j
+
 public class JwtFilter extends AuthenticatingFilter {
 
-
-    @Autowired
-    JwtUtil jwtUtil;
+    private JwtUtil jwtUtil;
 
 
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
 
-
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String token = httpServletRequest.getHeader("Token");
 
+        if(jwtUtil == null){
+            jwtUtil = ApplicationContextUtil.getBean("jwtUtil");
+        }
+
         if(token!=null){
+
+            if(!(jwtUtil.getBlockedToken(token))){
+
+                log.info("执行登录");
                 executeLogin(request,response);
                 return true;
+            }
         }
+
+        log.info("isAccessAllowed拦截");
+
         return false;
 
     }
@@ -46,6 +59,7 @@ public class JwtFilter extends AuthenticatingFilter {
     @Override
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
 
+        log.info("onAccessDenied拦截");
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
         httpServletResponse.setContentType("application/json; charset=utf-8");
         httpServletResponse.setCharacterEncoding("UTF-8");
@@ -64,9 +78,12 @@ public class JwtFilter extends AuthenticatingFilter {
         JwtToken jwtToken = new JwtToken(token);
         // 提交给realm进行登入，如果错误他会抛出异常并被捕获
         getSubject(request, response).login(jwtToken);
+
         // 如果没有抛出异常则代表登入成功，返回true
         return true;
     }
+
+
 
     @Override
     protected AuthenticationToken createToken(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {

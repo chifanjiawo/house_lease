@@ -23,8 +23,11 @@ public class ApplicationContextUtil implements ApplicationContextAware {
         return applicationContext;
                 }
 
-    public static <T> T getBean(String name){
-        return (T) applicationContext.getBean(name);
+    public static <T> T getBean(String name)throws NullPointerException{
+
+            return (T) applicationContext.getBean(name);
+
+
     }
 
     private static void checkApplicationContext() {

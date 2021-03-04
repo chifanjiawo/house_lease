@@ -3,6 +3,9 @@ package com.house.demo.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.house.demo.model.HouseOrder;
 
+import java.util.List;
+
 public interface HouseOrderMapper extends BaseMapper<HouseOrder> {
 
+    List<HouseOrder> getCurrentOrder();
 }

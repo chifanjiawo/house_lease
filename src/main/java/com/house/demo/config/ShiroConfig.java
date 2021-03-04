@@ -4,22 +4,29 @@ package com.house.demo.config;
 import com.house.demo.shiro.AccountRealm;
 import com.house.demo.shiro.JwtFilter;
 import com.house.demo.shiro.cache.RedisCacheManage;
-import org.apache.shiro.cache.CacheManager;
+
+import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
+import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.crazycake.shiro.RedisSessionDAO;
+import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import sun.misc.Cache;
+
+
 
 import javax.servlet.Filter;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -27,37 +34,8 @@ import java.util.Map;
  * @author xjj
  */
 @Configuration
+@Slf4j
 public class ShiroConfig {
-
-//    @Bean
-//    public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
-//        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-//        // 必须设置 SecurityManager
-//        shiroFilterFactoryBean.setSecurityManager(securityManager);
-//        // setLoginUrl 如果不设置值，默认会自动寻找Web工程根目录下的"/login.jsp"页面 或 "/login" 映射
-//        shiroFilterFactoryBean.setLoginUrl("/notLogin");
-//        // 设置无权限时跳转的 url;
-//        shiroFilterFactoryBean.setUnauthorizedUrl("/notRole");
-//
-//        // 设置拦截器
-//        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-//        //游客，开发权限
-//        filterChainDefinitionMap.put("/guest/**", "anon");
-//        //用户，需要角色权限 “user”
-//        filterChainDefinitionMap.put("/user/**", "roles[user]");
-//        //管理员，需要角色权限 “admin”
-//        filterChainDefinitionMap.put("/admin/**", "roles[admin]");
-//        //开放登陆接口
-//        filterChainDefinitionMap.put("/login", "anon");
-//        //其余接口一律拦截
-//        //主要这行代码必须放在所有权限设置的最后，不然会导致所有 url 都被拦截
-//        filterChainDefinitionMap.put("/**", "authc");
-//
-//        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
-//        System.out.println("Shiro拦截器工厂类注入成功");
-//        return shiroFilterFactoryBean;
-//    }
-
 
 
     /**
@@ -67,6 +45,12 @@ public class ShiroConfig {
     public DefaultWebSecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(accountRealm());
+        DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
+        DefaultSessionStorageEvaluator defaultSessionStorageEvaluator = new DefaultSessionStorageEvaluator();
+        defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
+        subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
+        securityManager.setSubjectDAO(subjectDAO);
+
         return securityManager;
     }
 
@@ -77,13 +61,7 @@ public class ShiroConfig {
         return new LifecycleBeanPostProcessor();
     }
 
-    //Shiro注解支持
-    @Bean
-    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
-        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
-        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
-        return authorizationAttributeSourceAdvisor;
-    }
+
     /**
      * 自定义身份认证 realm;
      * <p>
@@ -94,7 +72,6 @@ public class ShiroConfig {
     public AccountRealm accountRealm() {
 
         AccountRealm accountRealm = new AccountRealm();
-
         accountRealm.setCacheManager(new RedisCacheManage());
         accountRealm.setCachingEnabled(true);
         accountRealm.setAuthenticationCachingEnabled(true);
@@ -106,29 +83,26 @@ public class ShiroConfig {
 
     @Bean
     public ShiroFilterFactoryBean factory(DefaultWebSecurityManager securityManager) {
+
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
 
-        // 添加自己的过滤器并且取名为jwt
-        Map<String, Filter> filterMap = new HashMap<>();
-        //设置我们自定义的JWT过滤器
-        filterMap.put("jwt", new JwtFilter());
-        factoryBean.setFilters(filterMap);
+        Map<String, Filter> filters = new HashMap<>();
+        filters.put("jwt",new JwtFilter());
+        factoryBean.setFilters(filters);
         factoryBean.setSecurityManager(securityManager);
-        Map<String, String> filterRuleMap = new HashMap<>();
-        filterRuleMap.put("/user/**","anon");
-        filterRuleMap.put("/unauthorized/**", "anon");
-        // 所有请求通过我们自己的JWT Filter
-        filterRuleMap.put("/**", "jwt");
 
-        // 访问 /unauthorized/** 不通过JWTFilter
+        Map<String, String> filterMap = new LinkedHashMap<>();
 
-        factoryBean.setFilterChainDefinitionMap(filterRuleMap);
+//        filterMap.put("/user/login","anon");
+//        filterMap.put("/user/register","anon");
+//
+//        filterMap.put("/index/**","anon");
+//        filterMap.put("/**","jwt");
 
-        factoryBean.setLoginUrl("/user/test");
+        factoryBean.setFilterChainDefinitionMap(filterMap);
 
         return factoryBean;
     }
-
 
 
     @Bean
@@ -140,6 +114,25 @@ public class ShiroConfig {
             }
         };
     }
+
+    //Shiro注解支持
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
+        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+        return authorizationAttributeSourceAdvisor;
+    }
+
+    @Bean
+    public static DefaultAdvisorAutoProxyCreator getDefaultAdvisorAutoProxyCreator() {
+
+        DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
+        defaultAdvisorAutoProxyCreator.setUsePrefix(true);
+
+        return defaultAdvisorAutoProxyCreator;
+    }
+
+
 
 
 }

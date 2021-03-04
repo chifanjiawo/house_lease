@@ -35,6 +35,11 @@ public class AccountRealm extends AuthorizingRealm {
     }
 
     @Override
+    protected void clearCachedAuthenticationInfo(PrincipalCollection principals) {
+        super.clearCachedAuthenticationInfo(principals);
+    }
+
+    @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
 
         log.info("执行认证逻辑");
@@ -73,7 +78,8 @@ public class AccountRealm extends AuthorizingRealm {
         String principal = (String) principalCollection.getPrimaryPrincipal();
 
 
-        System.out.println("这是调用"+principal);
+
+        System.out.println("这是调用AuthorizationInfo"+principal);
         return null;
 
     }

@@ -29,4 +29,7 @@
     house_rent_include, house_early_time, house_num, house_decoration, house_lease_type, 
     house_address, house_furniture, house_desc, house_require, house_release_time, house_picture_url
   </sql>
+    <select id="getCurrentOrder" resultMap="BaseResultMap">
+      select * from house_order order by house_release_time asc;
+    </select>
 </mapper>

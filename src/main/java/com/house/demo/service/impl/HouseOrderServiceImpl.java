@@ -10,4 +10,6 @@ import com.house.demo.service.HouseOrderService;
 @Service
 public class HouseOrderServiceImpl extends ServiceImpl<HouseOrderMapper, HouseOrder> implements HouseOrderService{
 
+
+
 }

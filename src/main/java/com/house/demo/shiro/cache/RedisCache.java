@@ -17,55 +17,68 @@ import java.util.concurrent.TimeUnit;
 
 public class RedisCache<K,V> implements Cache<K,V> {
 
+    private String cacheName;
+
+    public RedisCache() {
+    }
+    public RedisCache(String cacheName){
+        this.cacheName = cacheName;
+
+    }
+
     @Override
     public V get(K k) throws CacheException {
-        RedisTemplate redisTemplate = ApplicationContextUtil.getBean("redisTemplate");
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        return (V) redisTemplate.opsForValue().get(k.toString());
+
+
+        return (V) getRedisTemplate().opsForHash().get(cacheName,k.toString());
     }
 
     @Override
     public V put(K k, V v) throws CacheException {
 
-        RedisTemplate redisTemplate = ApplicationContextUtil.getBean("redisTemplate");
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.opsForValue().set(k.toString(),v,5,TimeUnit.MINUTES);
+        getRedisTemplate().opsForHash().put(cacheName,k.toString(),v);
 
+        getRedisTemplate().expire(cacheName,10,TimeUnit.MINUTES);
         return null;
     }
 
     @Override
     public V remove(K k) throws CacheException {
 
-        RedisTemplate redisTemplate = ApplicationContextUtil.getBean("redisTemplate");
+        getRedisTemplate().delete(cacheName);
 
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-
-
-        redisTemplate.delete(k.toString());
         return null;
     }
 
     @Override
     public void clear() throws CacheException {
 
-
+        getRedisTemplate().delete(cacheName);
     }
 
     @Override
     public int size() {
-
-        return 0;
+        return Math.toIntExact(getRedisTemplate().opsForHash().size(cacheName));
     }
 
     @Override
     public Set<K> keys() {
-
-        return null;
+        return getRedisTemplate().opsForHash().keys(cacheName);
     }
 
     @Override
     public Collection<V> values() {
-        return null;
+        return getRedisTemplate().opsForHash().values(cacheName);
+    }
+
+
+    private RedisTemplate getRedisTemplate(){
+        RedisTemplate redisTemplate = ApplicationContextUtil.getBean("redisTemplate");
+
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+
+        return redisTemplate;
+
     }
 }

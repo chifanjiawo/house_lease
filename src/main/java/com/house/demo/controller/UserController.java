@@ -7,6 +7,10 @@ import com.house.demo.common.utils.JwtUtil;
 import com.house.demo.common.utils.Md5Util;
 import com.house.demo.dao.HouseUserMapper;
 import com.house.demo.model.HouseUser;
+import com.house.demo.service.HouseUserService;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,45 +20,56 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @author xjj
  */
+@Slf4j
 @RestController
-@RequestMapping("/user")
+@RequestMapping("user")
 public class UserController {
 
-
     @Autowired
-    private HouseUserMapper userMapper;
+    private HouseUserService userService;
 
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    @RequestMapping(value = "/login",method = RequestMethod.POST)
+    @PostMapping("login")
     public String userLogin(HttpServletRequest request,HttpServletResponse response,HouseUser user) {
 
-        if(request.getHeader("Token")!=null){
-            if(jwtUtil.validateToken(request.getHeader("Token"),user)){
-                return JSONObject.toJSONString(MyResult.fail("请勿重复登录"));
-            }
-        }
+        String token = request.getHeader("token");
+       return userService.tokenInspect(token, user,response);
 
-        String userName = user.getUserName();
-        String secret = user.getUserPassword();
-        HouseUser nuser = userMapper.getUserByName(userName);
-
-        if (nuser != null) {
-            String userPassword = nuser.getUserPassword();
-            if (Md5Util.parseMD5(secret, userPassword)) {
-
-                return JSONObject.toJSONString(MyResult.succ(jwtUtil.generateToken(nuser)));
-            }
-        }
-        return JSONObject.toJSONString(MyResult.fail("登录失败"));
     }
 
-    @RequestMapping(value = "/test",method = RequestMethod.GET)
+    @RequestMapping(value = "/logout",method = RequestMethod.GET)
+    @RequiresAuthentication
+    public String userLogout(HttpServletRequest request){
+       return userService.logout(request.getHeader("token"));
+    }
+
+    @PostMapping("/register")
+    public String userRegister(HouseUser user){
+        int i = userService.register(user);
+        if(i==1){
+            return JSONObject.toJSONString(MyResult.succ("注册成功"));
+        }else {
+            return JSONObject.toJSONString(MyResult.succ("注册失败"));
+        }
+    }
+
+    @PutMapping("/update")
+    @RequiresAuthentication
+    public String userUpdate(HouseUser user){
+        int i = userService.updateUser(user);
+        if(i==1){
+            return JSONObject.toJSONString(MyResult.succ("修改成功"));
+        }else {
+            return JSONObject.toJSONString(MyResult.succ("修改失败"));
+        }
+    }
+
+    @GetMapping("/test")
     public String test(){
-
-        return "测试登录";
+        return "test";
     }
+
+
+
 
 //    @RequestMapping(value = "/info",method = RequestMethod.GET)
 //    public String userInfo(){

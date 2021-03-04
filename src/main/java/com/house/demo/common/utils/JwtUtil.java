@@ -1,13 +1,15 @@
 package com.house.demo.common.utils;
 
 import com.house.demo.common.AuthConstant;
+
+import com.house.demo.common.TokenCache;
 import com.house.demo.model.HouseUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.apache.shiro.authc.AuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -17,13 +19,16 @@ import java.util.*;
  * @author xjj
  */
 @Component
+
 public class JwtUtil {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtil.class);
 
     private static final String CLAIM_KEY_USERNAME = "sub";
     private static final String CLAIM_KEY_CREATED = "created";
     private String secret="f4e2e52034348f86b67cde581c0f9eb5";
     private Long expiration=AuthConstant.EXPIRE_TIME;
+    public static Map<String,Object> blockTokenMap = new TokenCache<>(50);
 
     /**
      * 根据负责生成JWT的token
@@ -80,8 +85,13 @@ public class JwtUtil {
      * @param user 从数据库中查询出来的用户信息
      */
     public boolean validateToken(String token, HouseUser user) {
+        try{
         String username = getUserNameFromToken(token);
         return username.equals(user.getUserName()) && !isTokenExpired(token);
+        }catch (NullPointerException e){
+            return false;
+        }
+
     }
 
     /**
@@ -126,21 +136,31 @@ public class JwtUtil {
         return generateToken(claims);
     }
 
+    public void setTokenBlock(String token){
+        blockTokenMap.put(token,1);
+
+    }
+
+    public boolean getBlockedToken(String token){
+
+        if(blockTokenMap.get(token)==null) {
+
+            return false;
+        }
+        else {return true;}
+    }
+
+
     public static void main(String[] args) {
         HouseUser user = new HouseUser();
 
         user.setUserName("xiao");
-
-
         JwtUtil jwtUtil = new JwtUtil();
 
 //        String s = jwtUtil.generateToken(user);
 
 
 //        System.out.println(s);
-
-        System.out.println(jwtUtil.validateToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ4aWFvIiwiY3JlYXRlZCI6MTYxMzk5NTc2MjQ4MSwiZXhwIjoxNjEzOTk3MjAyfQ.MOFyQOpWPC9o3bUgn18dFjizcavgV2yD5v7zSl-TP8yl5p1bM75Uw8AKc6DAXsPPedVNgX2jkYvAleerTvPiXw", user));
-        System.out.println(jwtUtil.getUserNameFromToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ4aWFvIiwiY3JlYXRlZCI6MTYxMzk5NTc2MjQ4MSwiZXhwIjoxNjEzOTk3MjAyfQ.MOFyQOpWPC9o3bUgn18dFjizcavgV2yD5v7zSl-TP8yl5p1bM75Uw8AKc6DAXsPPedVNgX2jkYvAleerTvPiXw"));
 
 
 //        System.out.println(jwtUtil.validateToken(s, user));

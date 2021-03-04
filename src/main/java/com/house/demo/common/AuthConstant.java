@@ -15,7 +15,7 @@ public class AuthConstant {
     /**
      * token有效时间 时*分*秒*1000L
      */
-    public final static Long EXPIRE_TIME = 24*60*1000L;
+    public final static Long EXPIRE_TIME = 30*60*1000L;
 
     //登录认证结果,返回给前端
     public final static String UNKNOWN_ACCOUNT = "登录失败, 用户不存在。";
@@ -28,6 +28,6 @@ public class AuthConstant {
 
     public final static String TOKEN_EXPIRE = "验证失败，token过期，请重新登录。";
 
-    public final static String AUTHENTICATE_FAIL = "无访问权限，请尝试登录或联系管理员。";
+    public final static String AUTHENTICATE_FAIL = "无访问权限";
 
 }
