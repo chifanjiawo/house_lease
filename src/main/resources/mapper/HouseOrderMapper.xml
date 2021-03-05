@@ -32,4 +32,7 @@
     <select id="getCurrentOrder" resultMap="BaseResultMap">
       select * from house_order order by house_release_time asc;
     </select>
+
+
+
 </mapper>

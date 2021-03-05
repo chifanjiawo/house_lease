@@ -9,30 +9,25 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/comment")
 public class CommentController {
 
-    @PostMapping("/createCom")
-    public String createCom(){
-
-
+    @PostMapping("/createcom{id}")
+    public String createCom(@PathVariable("id")int id){
         return null;
     }
 
-    @GetMapping("/getCom/{id}")
+    @GetMapping("/getcom/{id}")
     public String getCom(@PathVariable("id")int id ){
 
-
         return null;
 
     }
 
-    @PutMapping("/updateCom/{id}")
+    @PutMapping("/updatecom/{id}")
     public String updateCom(@PathVariable("id")int id){
-
         return null;
-
 
     }
 
-    @DeleteMapping("/deleteCom/{id}")
+    @DeleteMapping("/deletecom/{id}")
     public String deleteCom(@PathVariable("id")int id){
 
         return null;

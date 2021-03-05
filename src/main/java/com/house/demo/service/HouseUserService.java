@@ -1,9 +1,12 @@
 package com.house.demo.service;
 
+import com.house.demo.model.HouseOrder;
 import com.house.demo.model.HouseUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 public interface HouseUserService extends IService<HouseUser> {
 
@@ -12,7 +15,11 @@ public interface HouseUserService extends IService<HouseUser> {
 
     HouseUser getUserByName(String name);
 
-    int updateUser(HouseUser user);
+    int updateUserById(HouseUser user);
+
+    int updateUserByName(HouseUser user);
+
+    int updatePassWord(String name,String pass);
 
     String gentoken(HouseUser user);
 
@@ -21,7 +28,9 @@ public interface HouseUserService extends IService<HouseUser> {
     String logout(String token);
 
 
+   String getCurrentUserName(String token);
 
+   List<HouseOrder> getUserStar(int userId);
 
 }
 

@@ -13,11 +13,12 @@ public interface HouseUserMapper extends BaseMapper<HouseUser> {
 
     HouseUser getUserByName(String name);
 
-    int updateUser(HouseUser user);
+    int updateUserByName(HouseUser user);
 
     int updatePassWord(@Param("name") String name,@Param("pass")String pass);
 
     int updateLoginTime(@Param("dateTime") Date dateTime , @Param("name") String name);
+
 
 
 }

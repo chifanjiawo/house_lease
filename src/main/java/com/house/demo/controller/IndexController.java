@@ -17,6 +17,8 @@ public class IndexController {
     @GetMapping("/lease/{page}")
     public String index(@PathVariable("page")int p){
 
+
+
         return null;
     }
 }

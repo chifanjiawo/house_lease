@@ -13,4 +13,24 @@ import com.house.demo.service.HouseCommentService;
 @Service
 public class HouseCommentServiceImpl extends ServiceImpl<HouseCommentMapper, HouseComment> implements HouseCommentService{
 
+    @Override
+    public List<HouseComment> getCommentPage() {
+
+        return null;
+    }
+
+    @Override
+    public boolean createComment() {
+        return false;
+    }
+
+    @Override
+    public boolean updateComment() {
+        return false;
+    }
+
+    @Override
+    public boolean deleteComment() {
+        return false;
+    }
 }

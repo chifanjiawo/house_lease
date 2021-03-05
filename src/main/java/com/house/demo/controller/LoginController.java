@@ -23,14 +23,13 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 @RestController
 @RequestMapping("user")
-public class UserController {
+public class LoginController {
 
     @Autowired
     private HouseUserService userService;
 
     @PostMapping("login")
     public String userLogin(HttpServletRequest request,HttpServletResponse response,HouseUser user) {
-
         String token = request.getHeader("token");
        return userService.tokenInspect(token, user,response);
 
@@ -52,21 +51,12 @@ public class UserController {
         }
     }
 
-    @PutMapping("/update")
-    @RequiresAuthentication
-    public String userUpdate(HouseUser user){
-        int i = userService.updateUser(user);
-        if(i==1){
-            return JSONObject.toJSONString(MyResult.succ("修改成功"));
-        }else {
-            return JSONObject.toJSONString(MyResult.succ("修改失败"));
-        }
+
+
+
     }
 
-    @GetMapping("/test")
-    public String test(){
-        return "test";
-    }
+
 
 
 
@@ -78,4 +68,4 @@ public class UserController {
 
 
 
-}
+

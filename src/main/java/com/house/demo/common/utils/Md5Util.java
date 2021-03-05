@@ -2,6 +2,9 @@ package com.house.demo.common.utils;
 
 import org.springframework.util.DigestUtils;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 /**
@@ -52,10 +55,8 @@ public class Md5Util {
 
     public static void main(String[] args) {
 
-        String s = Md5Util.encodeByMD5("1234567");
-
-        System.out.println(s);
-        System.out.println(parseMD5("1234567", s));
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println(df.format(new Date()));
 
     }
 }

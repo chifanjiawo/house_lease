@@ -4,6 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.house.demo.common.response.MyResult;
 import com.house.demo.common.utils.JwtUtil;
 import com.house.demo.common.utils.Md5Util;
+import com.house.demo.dao.HouseStarMapper;
+import com.house.demo.model.HouseOrder;
+import com.house.demo.shiro.JwtToken;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -15,19 +18,24 @@ import com.house.demo.model.HouseUser;
 import com.house.demo.dao.HouseUserMapper;
 import com.house.demo.service.HouseUserService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @CacheConfig(cacheNames = "userCache")
 public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser> implements HouseUserService {
 
-
     @Autowired
     private HouseUserMapper userMapper;
+
+    @Autowired
+    private HouseStarMapper starMapper;
+
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -62,8 +70,31 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
     }
 
     @Override
-    public int updateUser(HouseUser user) {
-        return userMapper.updateUser(user);
+    public int updateUserById(HouseUser user) {
+        return userMapper.updateById(user);
+    }
+
+    @Override
+    public int updateUserByName(HouseUser user) {
+
+        return userMapper.updateUserByName(user);
+    }
+
+    @Override
+    public int updatePassWord(String token, String pass) {
+
+        String name = getCurrentUserName(token);
+
+        String sf = Md5Util.encodeFirst(pass);
+
+        if(name!=null){
+            if(Md5Util.parseMD5(sf,userMapper.getUserByName(name).getUserPassword())){
+                return userMapper.updatePassWord(name,pass);
+            }
+
+        }
+        return 0;
+
     }
 
 
@@ -116,8 +147,6 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
 
         }
 
-
-
     }
 
     @Override
@@ -128,8 +157,19 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
         return JSONObject.toJSONString(MyResult.succ("注销成功"));
 
     }
+    @Override
+    public String getCurrentUserName(String token) {
+
+        return jwtUtil.getUserNameFromToken(token);
+    }
 
 
+
+    @Override
+    public List<HouseOrder>getUserStar(int userId){
+
+        return starMapper.getStarOrders(userId);
+    }
 }
 
 

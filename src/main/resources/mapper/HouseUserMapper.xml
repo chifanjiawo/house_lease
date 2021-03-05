@@ -29,17 +29,25 @@
       update house_user set user_password = #{pass} where user_name = #{name};
   </update>
 
-  <update id="updateUser">
+  <update id="updateUserByName">
 
     update house_user
     <set>
       <if test="userPassword != null">user_password=#{userPassword},</if>
       <if test="userAvatar != null">user_avatar=#{userAvatar},</if>
-      <if test="userTel != null">user_tel=#{userTel},</if>
+      <if test="userRole != null">user_role=#{userRole},</if>
+      <if test="userBanStatus != null">user_ban_status=#{userBanStatus},</if>
+      <if test="userRegisterTime != null">user_register_time=#{userRegisterTime},</if>
+      <if test="userTel != null">user_tel=#{userTel}</if>
+
     </set>
+
     where user_name = #{userName};
 
   </update>
+
+
+
 
 
 </mapper>
