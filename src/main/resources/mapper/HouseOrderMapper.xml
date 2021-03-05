@@ -8,8 +8,8 @@
     <result column="house_user_id" jdbcType="INTEGER" property="houseUserId" />
     <result column="house_type" jdbcType="VARCHAR" property="houseType" />
     <result column="house_orientation" jdbcType="VARCHAR" property="houseOrientation" />
-    <result column="house_area" jdbcType="LONGVARCHAR" property="houseArea" />
-    <result column="house_cost" jdbcType="LONGVARCHAR" property="houseCost" />
+    <result column="house_area" jdbcType="INTEGER" property="houseArea" />
+    <result column="house_cost" jdbcType="INTEGER" property="houseCost" />
     <result column="house_payment" jdbcType="VARCHAR" property="housePayment" />
     <result column="house_rent_include" jdbcType="VARCHAR" property="houseRentInclude" />
     <result column="house_early_time" jdbcType="TIMESTAMP" property="houseEarlyTime" />

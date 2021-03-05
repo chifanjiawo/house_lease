@@ -13,11 +13,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.house.demo.dao.HouseOrderMapper;
 import com.house.demo.model.HouseOrder;
 import com.house.demo.service.HouseOrderService;
+
 /**
  * @author xjj
  */
 @Service
-public class HouseOrderServiceImpl extends ServiceImpl<HouseOrderMapper, HouseOrder> implements HouseOrderService{
+public class HouseOrderServiceImpl extends ServiceImpl<HouseOrderMapper, HouseOrder> implements HouseOrderService {
 
 
     @Autowired
@@ -28,10 +29,10 @@ public class HouseOrderServiceImpl extends ServiceImpl<HouseOrderMapper, HouseOr
     private IdWorker idWorker;
 
     @Override
-    public List<HouseOrder> getOrdersByPage(int current,int size) {
+    public List<HouseOrder> getOrdersByPage(int current, int size) {
 
-        IPage<HouseOrder> page = new Page<>(current,size);
-        orderMapper.selectPage(page,null);
+        IPage<HouseOrder> page = new Page<>(current, size);
+        orderMapper.selectPage(page, null);
 
         return page.getRecords();
     }
@@ -45,7 +46,7 @@ public class HouseOrderServiceImpl extends ServiceImpl<HouseOrderMapper, HouseOr
 
         int i = orderMapper.insert(order);
 
-        if(i==1){
+        if (i == 1) {
             return true;
         }
 
@@ -55,8 +56,7 @@ public class HouseOrderServiceImpl extends ServiceImpl<HouseOrderMapper, HouseOr
     @Override
     public boolean updateHouseOrder(HouseOrder order) {
 
-
-        if (orderMapper.updateById(order)==1){
+        if (orderMapper.updateById(order) == 1) {
             return true;
         }
 
@@ -67,7 +67,7 @@ public class HouseOrderServiceImpl extends ServiceImpl<HouseOrderMapper, HouseOr
     public boolean deleteHouseOrder(long id) {
 
 
-        if(orderMapper.deleteById(id)==1){
+        if (orderMapper.deleteById(id) == 1) {
             return true;
         }
         return false;
@@ -79,3 +79,4 @@ public class HouseOrderServiceImpl extends ServiceImpl<HouseOrderMapper, HouseOr
         return orderMapper.selectById(i);
     }
 }
+

@@ -19,7 +19,7 @@ public interface HouseUserService extends IService<HouseUser> {
 
     int updateUserByName(HouseUser user);
 
-    int updatePassWord(String name,String pass);
+    int updatePassWord(String name, String pass);
 
     String gentoken(HouseUser user);
 
@@ -28,11 +28,12 @@ public interface HouseUserService extends IService<HouseUser> {
     String logout(String token);
 
 
-   String getCurrentUserName(String token);
+    String getCurrentUserName(String token);
 
-   List<HouseOrder> getUserStar(int userId);
+    List<HouseOrder> getUserStar(int userId);
 
 }
+
 
 
 

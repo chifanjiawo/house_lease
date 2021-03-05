@@ -14,6 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import java.util.Date;
+
 @SpringBootTest
 class DemoApplicationTests {
 
@@ -46,9 +48,20 @@ class DemoApplicationTests {
 
     @Test
     void fun02(){
-        HouseOrder order = new HouseOrder();
 
-        
+        HouseOrder order = new HouseOrder();
+        order.setHouseAddress("广东");
+        order.setHouseCost(1000);
+        order.setHouseArea(200);
+        order.setHouseDesc("这是一个描述");
+        order.setHouseOrientation("朝南");
+        order.setHouseEarlyTime(new Date());
+        order.setHouseNum((byte) 2);
+        order.setHouseRequire("需要很多东西");
+        order.setHouseDecoration("精装修");
+        order.setHousePayment("压二付一");
+        order.setHouseUserId(5);
+        order.setHouseType("类型");
 
         orderService.createHouseOrder(order);
     }

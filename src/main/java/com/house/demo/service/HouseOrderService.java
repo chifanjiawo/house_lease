@@ -5,10 +5,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 
-public interface HouseOrderService extends IService<HouseOrder>{
+public interface HouseOrderService extends IService<HouseOrder> {
 
 
-    List<HouseOrder> getOrdersByPage(int current,int size);
+    List<HouseOrder> getOrdersByPage(int current, int size);
 
     boolean createHouseOrder(HouseOrder order);
 
@@ -19,6 +19,5 @@ public interface HouseOrderService extends IService<HouseOrder>{
     HouseOrder selectSingleOrder(long id);
 
 
-
-
 }
+

@@ -9,6 +9,7 @@
     <result column="user_password" jdbcType="VARCHAR" property="userPassword" />
     <result column="user_last_login_time" jdbcType="TIMESTAMP" property="userLastLoginTime" />
     <result column="user_tel" jdbcType="VARCHAR" property="userTel" />
+    <result column="user_email" jdbcType="VARCHAR" property="userEmail" />
     <result column="user_avatar" jdbcType="VARCHAR" property="userAvatar" />
     <result column="user_register_time" jdbcType="TIMESTAMP" property="userRegisterTime" />
     <result column="user_role" jdbcType="VARCHAR" property="userRole" />
@@ -16,10 +17,10 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    user_id, user_name, user_password, user_last_login_time, user_tel, user_avatar, user_register_time, 
-    user_role, user_ban_status
+    user_id, user_name, user_password, user_last_login_time, user_tel, user_email, user_avatar, 
+    user_register_time, user_role, user_ban_status
   </sql>
-    <select id="getUserByName" resultType="com.house.demo.model.HouseUser" parameterType="java.lang.String">
+    <select id="getUserByName" parameterType="java.lang.String" resultType="com.house.demo.model.HouseUser">
       select * from house_user where user_name = #{name};
     </select>
     <update id="updateLoginTime">

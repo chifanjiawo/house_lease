@@ -13,9 +13,7 @@ import lombok.Data;
 @Data
 @TableName(value = "house_user")
 public class HouseUser {
-
     private static final long serialVersionUID = 5636524409799996936L;
-
     @TableId(value = "user_id", type = IdType.AUTO)
     private Integer userId;
 
@@ -30,6 +28,9 @@ public class HouseUser {
 
     @TableField(value = "user_tel")
     private String userTel;
+
+    @TableField(value = "user_email")
+    private String userEmail;
 
     @TableField(value = "user_avatar")
     private String userAvatar;
@@ -52,6 +53,8 @@ public class HouseUser {
     public static final String COL_USER_LAST_LOGIN_TIME = "user_last_login_time";
 
     public static final String COL_USER_TEL = "user_tel";
+
+    public static final String COL_USER_EMAIL = "user_email";
 
     public static final String COL_USER_AVATAR = "user_avatar";
 

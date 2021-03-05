@@ -7,14 +7,13 @@ import java.util.List;
 
 public interface HouseCommentService extends IService<HouseComment>{
 
+    List<HouseComment> getCommentPage(int current,int size);
 
-    List<HouseComment> getCommentPage();
+    boolean createComment(HouseComment comment);
 
-    boolean createComment();
+    boolean updateComment(HouseComment comment);
 
-    boolean updateComment();
-
-    boolean deleteComment();
+    boolean deleteComment(int id);
 
 
 

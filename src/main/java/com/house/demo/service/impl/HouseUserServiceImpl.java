@@ -44,14 +44,8 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
     @Override
     public int register(HouseUser user) {
 
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String d = df.format(new Date());
 
-        try {
-            user.setUserRegisterTime(df.parse(d));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        user.setUserRegisterTime(new Date());
 
         user.setUserBanStatus((byte) 0);
         String nPass = Md5Util.encodeByMD5(user.getUserPassword());
@@ -87,9 +81,9 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
 
         String sf = Md5Util.encodeFirst(pass);
 
-        if(name!=null){
-            if(Md5Util.parseMD5(sf,userMapper.getUserByName(name).getUserPassword())){
-                return userMapper.updatePassWord(name,pass);
+        if (name != null) {
+            if (Md5Util.parseMD5(sf, userMapper.getUserByName(name).getUserPassword())) {
+                return userMapper.updatePassWord(name, pass);
             }
 
         }
@@ -99,7 +93,7 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
 
 
     @Override
-    public  String gentoken(HouseUser user){
+    public String gentoken(HouseUser user) {
 
         String userName = user.getUserName();
         String secret = user.getUserPassword();
@@ -108,7 +102,7 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
         if (nuser != null) {
             String userPassword = nuser.getUserPassword();
             if (Md5Util.parseMD5(secret, userPassword)) {
-                userMapper.updateLoginTime(new Date(),nuser.getUserName());
+                userMapper.updateLoginTime(new Date(), nuser.getUserName());
                 return jwtUtil.generateToken(nuser);
             }
         }
@@ -120,27 +114,26 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
     public String tokenInspect(String token, HouseUser user, HttpServletResponse response) {
 
 
-        String msg="";
+        String msg = "";
 
-        if(token!=null){
-            if(jwtUtil.validateToken(token,user)){
-                if(jwtUtil.getBlockedToken(token)){
+        if (token != null) {
+            if (jwtUtil.validateToken(token, user)) {
+                if (jwtUtil.getBlockedToken(token)) {
                     msg = "token已经过期";
-                }
-                else {
+                } else {
                     msg = "请不要重复登录";
                 }
             }
             return JSONObject.toJSONString(MyResult.fail(msg));
 
-        }else {
-            if(user==null){
+        } else {
+            if (user == null) {
                 return JSONObject.toJSONString(MyResult.fail("请输入用户名密码"));
             }
             String t = gentoken(user);
 
-            if(t!=null){
-                response.setHeader("token",t);
+            if (t != null) {
+                response.setHeader("token", t);
                 return JSONObject.toJSONString(MyResult.succ("登录成功"));
             }
             return JSONObject.toJSONString(MyResult.fail("登录失败"));
@@ -157,6 +150,7 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
         return JSONObject.toJSONString(MyResult.succ("注销成功"));
 
     }
+
     @Override
     public String getCurrentUserName(String token) {
 
@@ -164,13 +158,13 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
     }
 
 
-
     @Override
-    public List<HouseOrder>getUserStar(int userId){
+    public List<HouseOrder> getUserStar(int userId) {
 
         return starMapper.getStarOrders(userId);
     }
 }
+
 
 
 

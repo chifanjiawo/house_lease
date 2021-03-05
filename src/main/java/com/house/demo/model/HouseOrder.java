@@ -4,17 +4,15 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-
-import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
 
 /**
- * @author mac
+ * @author xjj
  */
 @Data
 @TableName(value = "house_order")
-public class HouseOrder implements Serializable {
+public class HouseOrder {
     private static final long serialVersionUID = 8221967145116380824L;
     @TableId(value = "house_id", type = IdType.INPUT)
     private Long houseId;
@@ -29,10 +27,10 @@ public class HouseOrder implements Serializable {
     private String houseOrientation;
 
     @TableField(value = "house_area")
-    private String houseArea;
+    private Integer houseArea;
 
     @TableField(value = "house_cost")
-    private String houseCost;
+    private Integer houseCost;
 
     @TableField(value = "house_payment")
     private String housePayment;
