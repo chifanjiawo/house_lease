@@ -15,6 +15,8 @@ public interface HouseCommentService extends IService<HouseComment>{
 
     boolean deleteComment(int id);
 
+    List<HouseComment> getMyComment(int id,int current);
+
 
 
 }

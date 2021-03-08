@@ -35,7 +35,11 @@ public class HouseOrderServiceImpl extends ServiceImpl<HouseOrderMapper, HouseOr
         orderMapper.selectPage(page, null);
 
         return page.getRecords();
+
+
     }
+
+
 
     @Override
     public boolean createHouseOrder(HouseOrder order) {
@@ -66,17 +70,26 @@ public class HouseOrderServiceImpl extends ServiceImpl<HouseOrderMapper, HouseOr
     @Override
     public boolean deleteHouseOrder(long id) {
 
-
         if (orderMapper.deleteById(id) == 1) {
             return true;
         }
         return false;
     }
 
-    @Override
-    public HouseOrder selectSingleOrder(long i) {
 
-        return orderMapper.selectById(i);
+    @Override
+    public HouseOrder selectSingleOrder(long id) {
+
+        return orderMapper.selectById(id);
+    }
+
+    @Override
+    public List<HouseOrder> getMyRelease(int id,int current) {
+
+
+        List<HouseOrder> list = orderMapper.getMyStarOrder(id, current);
+
+        return list;
     }
 }
 

@@ -18,6 +18,8 @@ public interface HouseOrderService extends IService<HouseOrder> {
 
     HouseOrder selectSingleOrder(long id);
 
+    List<HouseOrder> getMyRelease(int id,int current);
+
 
 }
 

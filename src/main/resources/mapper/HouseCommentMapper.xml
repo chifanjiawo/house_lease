@@ -18,4 +18,15 @@
     comment_id, comment_pid, comment_house_id, comment_author_id, comment_author_name, 
     comment_author_avatar, comment_content, comment_create_time
   </sql>
+    <select id="getMyComment" resultMap="BaseResultMap">
+
+      select * from house_comment
+
+      where house_id = #{param1}
+
+      order by comment_create_time
+
+      limit #{param2}
+
+    </select>
 </mapper>

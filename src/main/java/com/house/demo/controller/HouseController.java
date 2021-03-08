@@ -4,14 +4,19 @@ import com.alibaba.fastjson.JSONObject;
 import com.house.demo.common.response.MyResult;
 import com.house.demo.model.HouseOrder;
 import com.house.demo.service.HouseOrderService;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author xjj
  */
 @RestController
 @RequestMapping("house")
+@RequiresAuthentication
 public class HouseController {
 
     @Autowired
@@ -64,6 +69,7 @@ public class HouseController {
 
         return JSONObject.toJSONString(order);
     }
+
 
 
 

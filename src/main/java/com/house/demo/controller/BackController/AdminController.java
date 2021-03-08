@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("admin")
 @RequiresRoles("admin")
-
 public class AdminController {
 
 
 
+    
 }

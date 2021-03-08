@@ -30,6 +30,8 @@ public class HouseCommentServiceImpl extends ServiceImpl<HouseCommentMapper, Hou
         return page.getRecords();
     }
 
+
+
     @Override
     public boolean createComment(HouseComment comment) {
         int i = commentMapper.insert(comment);
@@ -59,5 +61,13 @@ public class HouseCommentServiceImpl extends ServiceImpl<HouseCommentMapper, Hou
         }else {
             return false;
         }
+    }
+
+    @Override
+    public List<HouseComment> getMyComment(int id,int current) {
+
+        List<HouseComment> myComment = commentMapper.getMyComment(id, current);
+
+        return myComment;
     }
 }

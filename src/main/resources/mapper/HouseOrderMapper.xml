@@ -32,7 +32,18 @@
     <select id="getCurrentOrder" resultMap="BaseResultMap">
       select * from house_order order by house_release_time asc;
     </select>
+  <select id="getMyStarOrder" resultMap="BaseResultMap">
 
+
+      select * from house_order
+
+      where house_user_id = #{param1}
+
+      order by house_release_time
+
+      limit #{param2};
+
+  </select>
 
 
 </mapper>

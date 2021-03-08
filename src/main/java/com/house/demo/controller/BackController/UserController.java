@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.house.demo.common.response.MyResult;
 import com.house.demo.common.utils.JwtUtil;
 import com.house.demo.dao.HouseStarMapper;
+import com.house.demo.model.HouseComment;
 import com.house.demo.model.HouseOrder;
 import com.house.demo.model.HouseUser;
 import com.house.demo.service.HouseCommentService;
@@ -35,7 +36,6 @@ public class UserController {
     private HouseCommentService commentService;
 
 
-
     @PutMapping("update")
     public String userUpdate(HouseUser user) {
         int i = userService.updateUserById(user);
@@ -55,23 +55,20 @@ public class UserController {
 
     }
 
-    @GetMapping("release/{id}")
-    public String getMyRelease(@PathVariable("id")int id){
+    @GetMapping("release/{current}")
+    public String getMyRelease(@PathVariable("current")int current,@RequestParam("userId") int id){
 
+        List<HouseOrder> list = orderService.getMyRelease(id, current);
 
-
-
-        return null;
+        return JSONObject.toJSONString(list);
 
     }
 
-    @GetMapping("Comment/{id}")
-    public String getMyComment(@PathVariable("id")int id){
+    @GetMapping("Comment/{current}")
+    public String getMyComment(@PathVariable("current")int current,@RequestParam("useId")int id ){
+        List<HouseComment> myComment = commentService.getMyComment(id,current);
 
-
-
-
-        return null;
+        return JSONObject.toJSONString(myComment);
 
     }
 
