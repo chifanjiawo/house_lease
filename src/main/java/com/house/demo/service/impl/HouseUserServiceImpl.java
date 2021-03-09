@@ -46,7 +46,6 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
 
 
         user.setUserRegisterTime(new Date());
-
         user.setUserBanStatus((byte) 0);
         String nPass = Md5Util.encodeByMD5(user.getUserPassword());
         user.setUserPassword(nPass);

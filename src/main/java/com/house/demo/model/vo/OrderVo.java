@@ -8,4 +8,13 @@ import java.io.Serializable;
 
 public class OrderVo implements Serializable {
 
+    private long id;
+    private String titile;
+
+    private int area;
+
+    private String leaseType;
+
+    private String address;
+
 }
