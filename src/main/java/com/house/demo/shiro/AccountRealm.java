@@ -2,7 +2,7 @@ package com.house.demo.shiro;
 
 
 import com.house.demo.common.AuthConstant;
-import com.house.demo.common.utils.JwtUtil;
+import com.house.demo.utils.JwtUtil;
 import com.house.demo.dao.HouseUserMapper;
 import com.house.demo.model.HouseUser;
 import lombok.extern.slf4j.Slf4j;

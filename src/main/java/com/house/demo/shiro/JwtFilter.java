@@ -2,16 +2,14 @@ package com.house.demo.shiro;
 
 import com.alibaba.fastjson.JSONObject;
 import com.house.demo.common.AuthConstant;
-import com.house.demo.common.response.MyResult;
-import com.house.demo.common.utils.ApplicationContextUtil;
-import com.house.demo.common.utils.JwtUtil;
+import com.house.demo.common.MyResult;
+import com.house.demo.utils.ApplicationContextUtil;
+import com.house.demo.utils.JwtUtil;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
