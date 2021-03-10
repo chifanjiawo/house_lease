@@ -1,9 +1,8 @@
 package com.house.demo.shiro.cache;
 
-import com.house.demo.common.utils.ApplicationContextUtil;
+import com.house.demo.utils.ApplicationContextUtil;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
-import org.springframework.context.ApplicationContext;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 

@@ -1,4 +1,4 @@
-package com.house.demo.common.utils;
+package com.house.demo.utils;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

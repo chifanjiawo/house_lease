@@ -1,4 +1,4 @@
-package com.house.demo.common.response;
+package com.house.demo.common;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.house.demo.common.utils;
+package com.house.demo.utils;
 
 import org.springframework.util.DigestUtils;
 

@@ -1,15 +1,11 @@
 package com.house.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.house.demo.common.response.MyResult;
+import com.house.demo.common.MyResult;
 
-import com.house.demo.common.utils.JwtUtil;
-import com.house.demo.common.utils.Md5Util;
-import com.house.demo.dao.HouseUserMapper;
 import com.house.demo.model.HouseUser;
 import com.house.demo.service.HouseUserService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package com.house.demo.common.utils;
+package com.house.demo.utils;
 
 import com.house.demo.common.AuthConstant;
 
@@ -7,7 +7,6 @@ import com.house.demo.model.HouseUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.apache.shiro.authc.AuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -39,6 +38,7 @@ public class JwtUtil {
                 .setExpiration(generateExpirationDate())
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
+
     }
 
     /**

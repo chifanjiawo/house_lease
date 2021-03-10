@@ -12,7 +12,8 @@ import org.springframework.stereotype.Component;
 /**
  * @author xjj
  */
-
+//@Aspect
+//@Component
 public class LoggerAdvice {
 
     private Logger logger = LoggerFactory.getLogger(LoggerAdvice.class);

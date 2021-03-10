@@ -1,12 +1,11 @@
 package com.house.demo.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.house.demo.common.response.MyResult;
-import com.house.demo.common.utils.JwtUtil;
-import com.house.demo.common.utils.Md5Util;
+import com.house.demo.common.MyResult;
+import com.house.demo.utils.JwtUtil;
+import com.house.demo.utils.Md5Util;
 import com.house.demo.dao.HouseStarMapper;
 import com.house.demo.model.HouseOrder;
-import com.house.demo.shiro.JwtToken;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -18,11 +17,7 @@ import com.house.demo.model.HouseUser;
 import com.house.demo.dao.HouseUserMapper;
 import com.house.demo.service.HouseUserService;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -44,9 +39,7 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
     @Override
     public int register(HouseUser user) {
 
-
         user.setUserRegisterTime(new Date());
-
         user.setUserBanStatus((byte) 0);
         String nPass = Md5Util.encodeByMD5(user.getUserPassword());
         user.setUserPassword(nPass);
