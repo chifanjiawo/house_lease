@@ -1,4 +1,4 @@
-package com.house.demo.service.impl;
+package com.house.demo.service;
 
 /**
  * @author xjj

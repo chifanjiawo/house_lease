@@ -1,7 +1,7 @@
 package com.house.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.house.demo.common.MyResult;
+import com.house.demo.common.response.MyResult;
 import com.house.demo.model.HouseComment;
 import com.house.demo.service.HouseCommentService;
 import org.springframework.beans.factory.annotation.Autowired;

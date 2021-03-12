@@ -8,17 +8,17 @@ import lombok.Data;
 @Data
 public class SearchParam {
 
-    private String house_address;
+    private String houseAddress;
 
-    private String house_cost;
+    private String houseCost;
 
-    private String house_type;
+    private String houseType;
 
-    private String house_lease_type;
+    private String houseLeaseType;
 
-    private String house_orientation;
+    private String houseOrientation;
 
-    private String house_decoration;
+    private String houseDecoration;
 
 
 }

@@ -2,7 +2,7 @@ package com.house.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.house.demo.common.MyResult;
+import com.house.demo.common.response.MyResult;
 import com.house.demo.model.HouseComment;
 import com.house.demo.model.HouseOrder;
 import com.house.demo.model.HouseUser;

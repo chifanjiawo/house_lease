@@ -1,7 +1,12 @@
 package com.house.demo.service.impl;
 
+import com.house.demo.service.SearchSerivce;
+import org.springframework.stereotype.Service;
+
 /**
  * @author xjj
  */
-public class SearchServiceImpl {
+@Service
+public class SearchServiceImpl implements SearchSerivce {
+
 }
