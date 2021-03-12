@@ -1,12 +1,16 @@
 package com.house.demo.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.house.demo.common.MyResult;
+import com.house.demo.common.response.MyResult;
+import com.house.demo.model.vo.RegisterInfoVo;
 import com.house.demo.utils.JwtUtil;
 import com.house.demo.utils.Md5Util;
 import com.house.demo.dao.HouseStarMapper;
 import com.house.demo.model.HouseOrder;
+import com.house.demo.utils.MessageUtil;
+
 import org.apache.shiro.SecurityUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -31,17 +35,26 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
     @Autowired
     private HouseStarMapper starMapper;
 
-
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private MessageUtil messageUtil;
 
     @Override
-    public int register(HouseUser user) {
+    public int register(RegisterInfoVo infoVo) {
+
+        HouseUser user =new HouseUser();
+
+        boolean b = validateCode(infoVo.getTel(), infoVo.getCode());
+        if (!b){
+            return 0;
+        }
+        BeanUtils.copyProperties(infoVo,user);
 
         user.setUserRegisterTime(new Date());
         user.setUserBanStatus((byte) 0);
-        String nPass = Md5Util.encodeByMD5(user.getUserPassword());
+        String nPass = Md5Util.encodeByMD5(infoVo.getUserPassword());
         user.setUserPassword(nPass);
         user.setUserRole("user");
 
@@ -106,7 +119,6 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
     @Override
     public String tokenInspect(String token, HouseUser user, HttpServletResponse response) {
 
-
         String msg = "";
 
         if (token != null) {
@@ -156,6 +168,25 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
 
         return starMapper.getStarOrders(userId);
     }
+
+    @Override
+    public String sendMessage(String iphoneNum){
+
+        int i = messageUtil.sendMessage(iphoneNum);
+        if(i>0){
+            return JSONObject.toJSONString(MyResult.succ("发送验证码成功"));
+        }else {
+            return JSONObject.toJSONString(MyResult.fail("发送验证码失败"));
+        }
+
+    }
+
+    private boolean validateCode(String num,String code){
+
+        return messageUtil.validateCode(num,code);
+    }
+
+
 }
 
 

@@ -1,6 +1,7 @@
 package com.house.demo.model.vo;
 
 
+import com.house.demo.model.HouseComment;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -20,6 +21,6 @@ public class UserVo implements Serializable {
 
     private List<OrderVo> startList;
 
-    private List<CommentVo> commentList;
+    private List<HouseComment> commentList;
 
 }

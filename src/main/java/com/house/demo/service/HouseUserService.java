@@ -3,6 +3,7 @@ package com.house.demo.service;
 import com.house.demo.model.HouseOrder;
 import com.house.demo.model.HouseUser;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.house.demo.model.vo.RegisterInfoVo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,7 +12,7 @@ import java.util.List;
 public interface HouseUserService extends IService<HouseUser> {
 
 
-    int register(HouseUser user);
+    int register(RegisterInfoVo infoVo);
 
     HouseUser getUserByName(String name);
 
@@ -31,6 +32,9 @@ public interface HouseUserService extends IService<HouseUser> {
     String getCurrentUserName(String token);
 
     List<HouseOrder> getUserStar(int userId);
+
+    String sendMessage(String iphoneNum);
+
 
 }
 
