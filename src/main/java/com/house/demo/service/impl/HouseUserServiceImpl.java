@@ -10,6 +10,7 @@ import com.house.demo.model.HouseOrder;
 import com.house.demo.utils.MessageUtil;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -46,15 +47,16 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
 
         HouseUser user =new HouseUser();
 
-        boolean b = validateCode(infoVo.getTel(), infoVo.getCode());
+        System.out.println(infoVo);
+        boolean b = validateCode(infoVo.getUserTel(), infoVo.getCode());
         if (!b){
             return 0;
         }
         BeanUtils.copyProperties(infoVo,user);
-
         user.setUserRegisterTime(new Date());
         user.setUserBanStatus((byte) 0);
         String nPass = Md5Util.encodeByMD5(infoVo.getUserPassword());
+
         user.setUserPassword(nPass);
         user.setUserRole("user");
 
@@ -138,8 +140,9 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
             String t = gentoken(user);
 
             if (t != null) {
-                response.setHeader("token", t);
-                return JSONObject.toJSONString(MyResult.succ("登录成功"));
+//                response.setHeader("token", t);
+                System.out.println(t);
+                return JSONObject.toJSONString(MyResult.succ((Object) t));
             }
             return JSONObject.toJSONString(MyResult.fail("登录失败"));
 
@@ -178,6 +181,38 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
         }else {
             return JSONObject.toJSONString(MyResult.fail("发送验证码失败"));
         }
+
+    }
+
+    @Override
+    public MyResult loginByTel(String tel,String code) {
+
+        String t=null;
+
+        System.out.println(tel+code);
+
+        if(messageUtil.validateCode(tel,code)){
+
+            HouseUser user = userMapper.getUserNameByTel(tel);
+
+            t = genToeknByTel(user);
+        }
+
+        MyResult result;
+
+        if(t==null){
+            result = MyResult.fail("手机登录失败");
+        }else {
+            result = MyResult.succ((Object)t);
+        }
+
+        return result;
+    }
+
+    @Override
+    public String genToeknByTel(HouseUser user) {
+
+        return jwtUtil.generateToken(user);
 
     }
 

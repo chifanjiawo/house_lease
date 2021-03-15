@@ -1,5 +1,6 @@
 package com.house.demo.service;
 
+import com.house.demo.common.response.MyResult;
 import com.house.demo.model.HouseOrder;
 import com.house.demo.model.HouseUser;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -35,7 +36,9 @@ public interface HouseUserService extends IService<HouseUser> {
 
     String sendMessage(String iphoneNum);
 
+    MyResult loginByTel(String tel,String code);
 
+    String genToeknByTel(HouseUser user);
 }
 
 

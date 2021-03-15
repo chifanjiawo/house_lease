@@ -10,7 +10,7 @@ public class RegisterInfoVo  {
 
     private String userName;
 
-    private String tel;
+    private String userTel;
 
     private String code;
 

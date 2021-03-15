@@ -1,5 +1,6 @@
 package com.house.demo.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -12,16 +13,19 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author xjj
+ *
+ * 验证码处理工具类
  */
+@Slf4j
 @Component
 public class MessageUtil {
 
     @Autowired
     private RedisTemplate redisTemplate;
 
-    private static String uid="xjj180s";
+    private static String uid="";
 
-    private static String secretKey="d41d8cd98f00b204e980";
+    private static String secretKey="";
 
 
     public int sendMessage(String iphoneNum){
@@ -30,15 +34,19 @@ public class MessageUtil {
 
         String url = "http://gbk.api.smschinese.cn/?Uid="+uid+"&Key="+secretKey+"&smsMob="+iphoneNum+"&smsText="+ randomKey;
 
+        log.info(randomKey);
+
         RestTemplate restTemplate = new RestTemplate();
 
         ResponseEntity<String> entity = restTemplate.postForEntity(url, null, String.class);
 
-        int i = entity.getStatusCodeValue();
-        if(i>0){
-            setRandomKey(iphoneNum,randomKey);
-        }
-        return i;
+//        int i = Integer.parseInt(entity.getBody());
+//        if(i>0){
+//            setRandomKey(iphoneNum,randomKey);
+//        }
+        setRandomKey(iphoneNum,randomKey);
+
+        return 1;
     }
 
     public boolean validateCode(String num,String code){
@@ -49,6 +57,7 @@ public class MessageUtil {
             return s.equals(code);
         }
         return false;
+
     }
 
 
