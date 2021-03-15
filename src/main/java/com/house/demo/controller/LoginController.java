@@ -25,11 +25,20 @@ public class LoginController {
     @Autowired
     private HouseUserService userService;
 
-
     @PostMapping("login")
     public String userLogin(HttpServletRequest request,HttpServletResponse response,HouseUser user) {
+
+        System.out.println(user.getUserName()+":   "+user.getUserPassword());
         String token = request.getHeader("token");
        return userService.tokenInspect(token, user,response);
+
+    }
+    @PostMapping("tellogin")
+    public MyResult tellogin(@RequestParam("iphonenum")String tel,@RequestParam("code")String code){
+
+
+         return userService.loginByTel(tel,code);
+
     }
 
     @RequestMapping(value = "/logout",method = RequestMethod.GET)
@@ -45,26 +54,23 @@ public class LoginController {
         if(i==1){
             return JSONObject.toJSONString(MyResult.succ("注册成功"));
         }else {
-            return JSONObject.toJSONString(MyResult.succ("注册失败"));
+            return JSONObject.toJSONString(MyResult.fail("注册失败"));
         }
-
-
     }
 
-    @GetMapping("sendMessage")
+    @PostMapping("sendMessage")
     public String sendMessage(@RequestParam("iphonenum")String iphonemun){
-
         return userService.sendMessage(iphonemun);
 
     }
 
-
-
-
+    @GetMapping("test")
+    public String test(){
+        log.info("test");
+        return JSONObject.toJSONString(MyResult.fail("test"));
     }
 
-
-
+    }
 
 
 

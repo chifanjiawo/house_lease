@@ -92,7 +92,6 @@ public class UserController {
 
         int i = userService.updatePassWord(token,pass);
 
-
         if (i != 0) {
             return JSONObject.toJSONString(MyResult.succ("用户信息修改成功"));
         } else {

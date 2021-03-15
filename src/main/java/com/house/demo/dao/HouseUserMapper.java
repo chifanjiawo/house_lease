@@ -17,5 +17,5 @@ public interface HouseUserMapper extends BaseMapper<HouseUser> {
 
     int updateLoginTime(@Param("dateTime") Date dateTime, @Param("name") String name);
 
-
+    HouseUser getUserNameByTel(String tel);
 }
