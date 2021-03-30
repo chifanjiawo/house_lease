@@ -2,6 +2,7 @@ package com.house.demo.service;
 
 import com.house.demo.model.HouseOrder;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.house.demo.model.vo.OrderVo;
 
 import java.util.List;
 
@@ -18,8 +19,11 @@ public interface HouseOrderService extends IService<HouseOrder> {
 
     HouseOrder selectSingleOrder(long id);
 
-    List<HouseOrder> getMyRelease(int id,int current);
+    List<HouseOrder> getMyRelease(int id, int current);
 
+    List<OrderVo> getRecomOrder();
 
+    OrderVo selectOrderById(Long id );
 }
+
 

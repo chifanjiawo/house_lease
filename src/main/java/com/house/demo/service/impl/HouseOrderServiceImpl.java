@@ -3,10 +3,13 @@ package com.house.demo.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.house.demo.model.vo.OrderVo;
 import com.house.demo.utils.IdWorker;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -83,12 +86,48 @@ public class HouseOrderServiceImpl extends ServiceImpl<HouseOrderMapper, HouseOr
     }
 
     @Override
-    public List<HouseOrder> getMyRelease(int id,int current) {
+    public List<HouseOrder> getMyRelease(int id, int current) {
 
 
         List<HouseOrder> list = orderMapper.getMyStarOrder(id, current);
 
         return list;
     }
+
+    @Override
+    public List<OrderVo> getRecomOrder() {
+
+        List<OrderVo> list = orderMapper.getRecomOrder();
+
+        return list;
+
+    }
+
+    @Override
+    public OrderVo selectOrderById(Long id) {
+
+        OrderVo order = orderMapper.getOrderById(id);
+//        OrderVo orderVo = new OrderVo();
+//        BeanUtils.copyProperties(order,orderVo);
+
+        String temp = order.getHouseFurniture();
+
+
+        String[] strings = temp.split(",");
+        List<String> list  =  new ArrayList<>();
+
+
+        for (int i = 0; i < strings.length; i++) {
+
+            list.add(strings[i]);
+        }
+
+        order.setFurniture(list);
+
+        return order;
+    }
+
+
 }
+
 

@@ -58,6 +58,11 @@
     select user_id,user_name,user_password from house_user where user_tel = #{tel};
 
   </select>
+    <select id="getUserById" resultType="com.house.demo.model.vo.UserVo">
+
+      select user_id,user_name,user_tel,user_last_login_time,user_avatar from house_user where user_id = #{id};
+
+    </select>
 
 
 </mapper>

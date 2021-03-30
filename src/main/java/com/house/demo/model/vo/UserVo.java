@@ -5,6 +5,7 @@ import com.house.demo.model.HouseComment;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,9 +14,15 @@ import java.util.List;
 @Data
 public class UserVo implements Serializable {
 
-    private int id;
+    private int userId;
 
-    private String name;
+    private String userName;
+
+    private String userTel;
+
+    private Date userLastLoginTime;
+
+    private String userAvatar;
 
     private List<OrderVo> orderList;
 

@@ -3,6 +3,7 @@ package com.house.demo.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.house.demo.common.response.MyResult;
 import com.house.demo.model.vo.RegisterInfoVo;
+import com.house.demo.model.vo.UserVo;
 import com.house.demo.utils.JwtUtil;
 import com.house.demo.utils.Md5Util;
 import com.house.demo.dao.HouseStarMapper;
@@ -214,6 +215,15 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
 
         return jwtUtil.generateToken(user);
 
+    }
+
+    @Override
+    public UserVo getUserById(String id) {
+
+
+        UserVo user = userMapper.getUserById(id);
+
+        return user;
     }
 
     private boolean validateCode(String num,String code){

@@ -1,11 +1,13 @@
 package com.house.demo.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.house.demo.common.response.MyResult;
 import com.house.demo.model.HouseComment;
 import com.house.demo.model.HouseOrder;
 import com.house.demo.model.HouseUser;
+import com.house.demo.model.vo.UserVo;
 import com.house.demo.service.HouseCommentService;
 import com.house.demo.service.HouseOrderService;
 import com.house.demo.service.HouseUserService;
@@ -98,6 +100,20 @@ public class UserController {
             return JSONObject.toJSONString(MyResult.succ("用户信息修改失败"));
         }
 
+    }
+
+    @GetMapping("getUser/{id}")
+    public String getUser(@PathVariable("id")String id){
+
+        UserVo user = userService.getUserById(id);
+
+        if(user!=null){
+
+            return JSONObject.toJSONString(MyResult.succ(user));
+        }else {
+            return JSONObject.toJSONString(MyResult.fail("查询失败"));
+
+        }
     }
 
 

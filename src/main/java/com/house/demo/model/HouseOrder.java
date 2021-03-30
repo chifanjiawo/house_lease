@@ -68,6 +68,9 @@ public class HouseOrder {
     @TableField(value = "house_picture_url")
     private String housePictureUrl;
 
+    @TableField(value = "house_title")
+    private String houseTitle;
+
     public static final String COL_HOUSE_ID = "house_id";
 
     public static final String COL_HOUSE_USER_ID = "house_user_id";
@@ -103,4 +106,6 @@ public class HouseOrder {
     public static final String COL_HOUSE_RELEASE_TIME = "house_release_time";
 
     public static final String COL_HOUSE_PICTURE_URL = "house_picture_url";
+
+    public static final String COL_HOUSE_TITLE = "house_title";
 }
