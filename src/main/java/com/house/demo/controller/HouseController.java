@@ -3,10 +3,13 @@ package com.house.demo.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.house.demo.common.response.MyResult;
 import com.house.demo.model.HouseOrder;
+import com.house.demo.model.vo.OrderVo;
 import com.house.demo.service.HouseOrderService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author xjj
@@ -62,11 +65,24 @@ public class HouseController {
     @GetMapping("get/{id}")
     public String getHouseOrders(@PathVariable("id")long id){
 
-        HouseOrder order = orderService.getById(id);
+        OrderVo order = orderService.selectOrderById(id);
+
 
         return JSONObject.toJSONString(order);
     }
 
+    @GetMapping("getRecom")
+    public MyResult getRecomOrder(){
+
+        List<OrderVo> order = orderService.getRecomOrder();
+
+        if(order!=null){
+           return  MyResult.succ(order);
+        }else {
+            return MyResult.fail("查询失败");
+        }
+
+    }
 
 
 

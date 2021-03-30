@@ -241,7 +241,7 @@
     background: url(../assets/bg.jpg);
     width:100%;  
     height:100%;  /**宽高100%是为了图片铺满屏幕 */
-     z-index:-1;
+    /* z-index:-1; */
     position: absolute;
     top: -0.5px;
     left: -0.5px;

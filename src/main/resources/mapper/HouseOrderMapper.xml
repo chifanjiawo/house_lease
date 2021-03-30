@@ -22,19 +22,31 @@
     <result column="house_require" jdbcType="VARCHAR" property="houseRequire" />
     <result column="house_release_time" jdbcType="TIMESTAMP" property="houseReleaseTime" />
     <result column="house_picture_url" jdbcType="VARCHAR" property="housePictureUrl" />
+    <result column="house_title" jdbcType="VARCHAR" property="houseTitle" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     house_id, house_user_id, house_type, house_orientation, house_area, house_cost, house_payment, 
     house_rent_include, house_early_time, house_num, house_decoration, house_lease_type, 
-    house_address, house_furniture, house_desc, house_require, house_release_time, house_picture_url
+    house_address, house_furniture, house_desc, house_require, house_release_time, house_picture_url, 
+    house_title
   </sql>
+
+  <resultMap id="OrderMap" type="com.house.demo.model.vo.OrderVo">
+    <id column="house_id" property="houseId" />
+    <result column="house_area" property="houseArea" />
+    <result column="house_cost" property="houseCost" />
+    <result column="house_address" property="houseAddress" />
+    <result column="house_decoration" property="houseType" />
+    <result column="user_name" property="userName" />
+    <result column="house_title" property="houseTitle" />
+    <result column="house_picture_url" property="housePictureUrl" />
+
+  </resultMap>
     <select id="getCurrentOrder" resultMap="BaseResultMap">
       select * from house_order order by house_release_time asc;
     </select>
   <select id="getMyStarOrder" resultMap="BaseResultMap">
-
-
       select * from house_order
 
       where house_user_id = #{param1}
@@ -42,6 +54,24 @@
       order by house_release_time
 
       limit #{param2};
+
+  </select>
+    <select id="getRecomOrder" resultMap="OrderMap">
+
+      select house_id,house_area,house_cost,house_address,house_decoration,house_picture_url,house_title,house_user.user_name from house_order
+
+      left join house_user on house_user_id = user_id
+
+      order by house_release_time limit 8;
+
+    </select>
+  <select id="getOrderById" resultType="com.house.demo.model.vo.OrderVo">
+
+    select house_id,house_cost,house_orientation,house_lease_type, house_picture_url,house_area,house_decoration,house_desc,house_furniture, house_type, house_orientation, house_area, user_name,user_tel,user_last_login_time
+
+    from house_order left join house_user on house_user_id = user_id
+
+    where house_id = #{id};
 
   </select>
 

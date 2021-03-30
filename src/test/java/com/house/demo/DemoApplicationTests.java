@@ -11,6 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.util.Date;
+import java.util.Map;
 
 @SpringBootTest
 class DemoApplicationTests {
@@ -39,6 +40,8 @@ class DemoApplicationTests {
     void fun01(){
         JwtUtil jwtUtil = ApplicationContextUtil.getBean("jwtUtil");
         System.out.println(jwtUtil==this.jwtUtil);
+
+
 
     }
 

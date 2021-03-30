@@ -5,6 +5,7 @@ import com.house.demo.model.HouseOrder;
 import com.house.demo.model.HouseUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.house.demo.model.vo.RegisterInfoVo;
+import com.house.demo.model.vo.UserVo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,6 +40,8 @@ public interface HouseUserService extends IService<HouseUser> {
     MyResult loginByTel(String tel,String code);
 
     String genToeknByTel(HouseUser user);
+
+    UserVo getUserById(String id );
 }
 
 
