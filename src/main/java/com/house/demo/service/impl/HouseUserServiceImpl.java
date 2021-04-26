@@ -2,6 +2,7 @@ package com.house.demo.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.house.demo.common.response.MyResult;
+import com.house.demo.model.vo.OrderVo;
 import com.house.demo.model.vo.RegisterInfoVo;
 import com.house.demo.model.vo.UserVo;
 import com.house.demo.utils.JwtUtil;
@@ -46,14 +47,14 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
     @Override
     public int register(RegisterInfoVo infoVo) {
 
-        HouseUser user =new HouseUser();
+        HouseUser user = new HouseUser();
 
         System.out.println(infoVo);
         boolean b = validateCode(infoVo.getUserTel(), infoVo.getCode());
-        if (!b){
+        if (!b) {
             return 0;
         }
-        BeanUtils.copyProperties(infoVo,user);
+        BeanUtils.copyProperties(infoVo, user);
         user.setUserRegisterTime(new Date());
         user.setUserBanStatus((byte) 0);
         String nPass = Md5Util.encodeByMD5(infoVo.getUserPassword());
@@ -66,7 +67,7 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
 
     }
 
-    @Cacheable(key = "#p0")
+    //    @Cacheable(key = "#p0")
     @Override
     public HouseUser getUserByName(String name) {
         return userMapper.getUserByName(name);
@@ -84,15 +85,18 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
     }
 
     @Override
-    public int updatePassWord(String token, String pass) {
+    public int updatePassWord(String token, String oldPass,String newPass) {
 
         String name = getCurrentUserName(token);
 
-        String sf = Md5Util.encodeFirst(pass);
+
+
 
         if (name != null) {
-            if (Md5Util.parseMD5(sf, userMapper.getUserByName(name).getUserPassword())) {
-                return userMapper.updatePassWord(name, pass);
+            if (Md5Util.parseMD5(oldPass, userMapper.getUserByName(name).getUserPassword())) {
+                System.out.println("进入方法");
+                String s = Md5Util.encodeByMD5(newPass);
+                return userMapper.updatePassWord(name, s);
             }
 
         }
@@ -107,11 +111,12 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
         String userName = user.getUserName();
         String secret = user.getUserPassword();
         HouseUser nuser = userMapper.getUserByName(userName);
-
+        System.out.println(nuser);
         if (nuser != null) {
             String userPassword = nuser.getUserPassword();
             if (Md5Util.parseMD5(secret, userPassword)) {
                 userMapper.updateLoginTime(new Date(), nuser.getUserName());
+
                 return jwtUtil.generateToken(nuser);
             }
         }
@@ -120,34 +125,25 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
     }
 
     @Override
-    public String tokenInspect(String token, HouseUser user, HttpServletResponse response) {
+    public boolean tokenInspect(String token, String name) {
 
-        String msg = "";
+        if (jwtUtil.getBlockedToken(token)) {
 
-        if (token != null) {
-            if (jwtUtil.validateToken(token, user)) {
-                if (jwtUtil.getBlockedToken(token)) {
-                    msg = "token已经过期";
-                } else {
-                    msg = "请不要重复登录";
-                }
-            }
-            return JSONObject.toJSONString(MyResult.fail(msg));
+            return false;
 
         } else {
-            if (user == null) {
-                return JSONObject.toJSONString(MyResult.fail("请输入用户名密码"));
-            }
-            String t = gentoken(user);
 
-            if (t != null) {
-//                response.setHeader("token", t);
-                System.out.println(t);
-                return JSONObject.toJSONString(MyResult.succ((Object) t));
+            HouseUser user = userMapper.getUserByName(name);
+
+            if (jwtUtil.validateToken(token, user)) {
+
+                return true;
             }
-            return JSONObject.toJSONString(MyResult.fail("登录失败"));
+
+            return false;
 
         }
+
 
     }
 
@@ -170,29 +166,30 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
     @Override
     public List<HouseOrder> getUserStar(int userId) {
 
-        return starMapper.getStarOrders(userId);
+//        return starMapper.getStarOrders(userId);
+            return null;
     }
 
     @Override
-    public String sendMessage(String iphoneNum){
+    public String sendMessage(String iphoneNum) {
 
         int i = messageUtil.sendMessage(iphoneNum);
-        if(i>0){
+        if (i > 0) {
             return JSONObject.toJSONString(MyResult.succ("发送验证码成功"));
-        }else {
+        } else {
             return JSONObject.toJSONString(MyResult.fail("发送验证码失败"));
         }
 
     }
 
     @Override
-    public MyResult loginByTel(String tel,String code) {
+    public MyResult loginByTel(String tel, String code) {
 
-        String t=null;
+        String t = null;
 
-        System.out.println(tel+code);
+        System.out.println(tel + code);
 
-        if(messageUtil.validateCode(tel,code)){
+        if (messageUtil.validateCode(tel, code)) {
 
             HouseUser user = userMapper.getUserNameByTel(tel);
 
@@ -201,10 +198,10 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
 
         MyResult result;
 
-        if(t==null){
+        if (t == null) {
             result = MyResult.fail("手机登录失败");
-        }else {
-            result = MyResult.succ((Object)t);
+        } else {
+            result = MyResult.succ((Object) t);
         }
 
         return result;
@@ -226,13 +223,31 @@ public class HouseUserServiceImpl extends ServiceImpl<HouseUserMapper, HouseUser
         return user;
     }
 
-    private boolean validateCode(String num,String code){
+    @Override
+    public List<OrderVo> getMyStarOrder(int userId) {
+       return starMapper.getStarOrders(userId);
 
-        return messageUtil.validateCode(num,code);
+
+    }
+
+    @Override
+    public Integer setUserAvatar(int id, String avatarUrl) {
+
+        int i = userMapper.setUserAvatar(id, avatarUrl);
+
+
+
+        return i;
+    }
+
+    private boolean validateCode(String num, String code) {
+
+        return messageUtil.validateCode(num, code);
     }
 
 
 }
+
 
 
 

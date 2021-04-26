@@ -26,25 +26,42 @@ public class LoginController {
     private HouseUserService userService;
 
     @PostMapping("login")
-    public String userLogin(HttpServletRequest request,HttpServletResponse response,HouseUser user) {
-
+    public MyResult userLogin(HouseUser user) {
         System.out.println(user.getUserName()+":   "+user.getUserPassword());
-        String token = request.getHeader("token");
-       return userService.tokenInspect(token, user,response);
 
+        String res = userService.gentoken(user);
+
+        if(res!=null){
+            return MyResult.succ((Object)res);
+        }
+       return MyResult.fail("操作失败");
     }
+
+    @GetMapping("inspectToken")
+    public MyResult inspect(HttpServletRequest request,@RequestParam("userName") String name){
+        String token = request.getHeader("token");
+
+        if (userService.tokenInspect(token,name)) {
+            return MyResult.succ("token有效");
+        }
+
+
+        return MyResult.fail("token失效");
+    }
+
+
     @PostMapping("tellogin")
     public MyResult tellogin(@RequestParam("iphonenum")String tel,@RequestParam("code")String code){
-
 
          return userService.loginByTel(tel,code);
 
     }
 
     @RequestMapping(value = "/logout",method = RequestMethod.GET)
-    @RequiresAuthentication
+//    @RequiresAuthentication
     public String userLogout(HttpServletRequest request){
-       return userService.logout(request.getHeader("token"));
+
+        return userService.logout(request.getHeader("token"));
     }
 
     @PostMapping("/register")
@@ -64,13 +81,20 @@ public class LoginController {
 
     }
 
-    @GetMapping("test")
-    public String test(){
-        log.info("test");
-        return JSONObject.toJSONString(MyResult.fail("test"));
-    }
+    @GetMapping("getUserId")
+    public MyResult getID(@RequestParam("userName")String name){
+
+        HouseUser user = userService.getUserByName(name);
+        if(user!=null){
+            return MyResult.succ(user.getUserId());
+        }else {
+            return MyResult.fail("查询失败");
+        }
 
     }
+
+
+}
 
 
 

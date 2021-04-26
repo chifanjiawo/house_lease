@@ -22,6 +22,10 @@ public class OrderVo implements Serializable {
 
     private String userTel;
 
+    private String userNickName;
+
+    private int houseUserId;
+
     private int houseCost;
 
     private int houseArea;
@@ -29,6 +33,10 @@ public class OrderVo implements Serializable {
     private String houseTitle;
 
     private String houseAddress;
+
+    private String addressDetail;
+
+    private String addressZone;
 
     private String houseType;
 
@@ -46,6 +54,29 @@ public class OrderVo implements Serializable {
      private String houseDesc;
 
      private String houseFurniture;
+
+     private Date houseReleaseTime;
+
+    private List<String> include;
+
+    private String houseRentInclude;
+
+    private String houseRequire;
+
+    private List<String> requireP;
+
+    private String housePayment;
+
+    private Date houseEarlyTime;
+
+    private List<String> images;
+
+    private List<String> furnitureInCn;
+
+    private  int houseNum;
+
+    private String userAvatar;
+
 
 
 

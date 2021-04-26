@@ -20,6 +20,9 @@ public class HouseUser {
     @TableField(value = "user_name")
     private String userName;
 
+    @TableField(value = "user_nick_name")
+    private String userNickName;
+
     @TableField(value = "user_password")
     private String userPassword;
 
@@ -47,6 +50,8 @@ public class HouseUser {
     public static final String COL_USER_ID = "user_id";
 
     public static final String COL_USER_NAME = "user_name";
+
+    public static final String COL_USER_NICK_NAME = "user_nick_name";
 
     public static final String COL_USER_PASSWORD = "user_password";
 

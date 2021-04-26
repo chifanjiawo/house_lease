@@ -55,8 +55,13 @@ public class Md5Util {
 
     public static void main(String[] args) {
 
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        System.out.println(df.format(new Date()));
+//        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        System.out.println(df.format(new Date()));
+
+        System.out.println(Md5Util.encodeByMD5("1234567"));
+
+        System.out.println(Md5Util.parseMD5("1234567","JoNHwfcea920f7412b5da7be0cf42b8c93759"));
+
 
     }
 }

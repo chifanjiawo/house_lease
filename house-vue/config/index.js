@@ -10,7 +10,25 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/ipapi': {       //此处并非和url一致
+        target:'https://lerry.me/ip',
+        secure: true,
+        changeOrigin:true, //允许跨域
+        pathRewrite:{
+          '^/ipapi': ''
+        }
+      },
+      '/localapi':{
+        target:'https://apis.map.qq.com/ws',
+        secure: true,
+        changeOrigin:true, //允许跨域
+        pathRewrite:{
+          '^/localapi': ''
+        }
+      }
+
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

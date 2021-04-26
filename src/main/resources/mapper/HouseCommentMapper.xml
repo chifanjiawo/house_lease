@@ -29,4 +29,24 @@
       limit #{param2}
 
     </select>
+    <select id="getOrderComment" resultMap="BaseResultMap">
+
+      select * from house_comment
+
+
+      where comment_house_id = #{id}
+
+      order by comment_pid,comment_create_time
+
+
+    </select>
+  <select id="getUserComment" resultMap="BaseResultMap">
+
+    select * from house_comment
+    where comment_author_id  = #{id}
+  </select>
+    <delete id="delOrderComment">
+      delete from house_comment where comment_house_id = #{id}
+
+    </delete>
 </mapper>

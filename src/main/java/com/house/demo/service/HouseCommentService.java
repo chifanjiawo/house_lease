@@ -18,5 +18,9 @@ public interface HouseCommentService extends IService<HouseComment>{
     List<HouseComment> getMyComment(int id,int current);
 
 
+    List<HouseComment> getOrderComment(long id);
 
+    List<HouseComment> getUserComment(int id);
+
+    List<HouseComment> getMessageComment(int id);
 }

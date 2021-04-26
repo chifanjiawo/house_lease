@@ -8,8 +8,15 @@ import java.util.List;
 /**
  * @author xjj
  */
+
 public interface HouseCommentMapper extends BaseMapper<HouseComment> {
 
 
     List<HouseComment> getMyComment(int id ,int current);
+
+    List<HouseComment> getOrderComment(long id);
+
+    List<HouseComment> getUserComment(int id);
+
+    int delOrderComment(long id);
 }

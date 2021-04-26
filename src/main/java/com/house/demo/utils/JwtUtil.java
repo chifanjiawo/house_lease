@@ -26,6 +26,7 @@ public class JwtUtil {
     private static final String CLAIM_KEY_USERNAME = "sub";
     private static final String CLAIM_KEY_CREATED = "created";
     private String secret="f4e2e52034348f86b67cde581c0f9eb5";
+
     private Long expiration=AuthConstant.EXPIRE_TIME;
     public static Map<String,Object> blockTokenMap = new TokenCache<>(50);
 

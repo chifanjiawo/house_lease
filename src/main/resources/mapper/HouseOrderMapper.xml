@@ -24,6 +24,10 @@
     <result column="house_picture_url" jdbcType="VARCHAR" property="housePictureUrl" />
     <result column="house_title" jdbcType="VARCHAR" property="houseTitle" />
   </resultMap>
+
+
+
+
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     house_id, house_user_id, house_type, house_orientation, house_area, house_cost, house_payment, 
@@ -32,17 +36,48 @@
     house_title
   </sql>
 
-  <resultMap id="OrderMap" type="com.house.demo.model.vo.OrderVo">
-    <id column="house_id" property="houseId" />
-    <result column="house_area" property="houseArea" />
-    <result column="house_cost" property="houseCost" />
-    <result column="house_address" property="houseAddress" />
-    <result column="house_decoration" property="houseType" />
-    <result column="user_name" property="userName" />
-    <result column="house_title" property="houseTitle" />
-    <result column="house_picture_url" property="housePictureUrl" />
+  <!--<resultMap id="OrderMap" type="com.house.demo.model.vo.OrderVo">-->
+    <!--<id column="house_id" property="houseId" />-->
+    <!--<result column="house_area" property="houseArea" />-->
+    <!--<result column="house_cost" property="houseCost" />-->
+    <!--<result column="house_address" property="houseAddress" />-->
+    <!--<result column="house_decoration" property="houseType" />-->
+    <!--<result column="user_name" property="userName" />-->
+    <!--<result column="house_title" property="houseTitle" />-->
+    <!--<result column="house_picture_url" property="housePictureUrl" />-->
 
-  </resultMap>
+  <!--</resultMap>-->
+
+  <!--<resultMap id="orderVoMap" type="com.house.demo.model.vo.OrderVo">-->
+    <!--<result column="house_id" jdbcType="BIGINT" property="houseId" />-->
+    <!--<result column="user_name" jdbcType="VARCHAR" property="userName" />-->
+    <!--<result column="user_last_login_time" jdbcType="DATE" property="userLastLoginTime" />-->
+    <!--<result column="user_tel" jdbcType="VARCHAR" property="userTel" />-->
+    <!--<result column="user_nick_name" jdbcType="VARCHAR" property="userNickName" />-->
+    <!--<result column="house_user_id" jdbcType="UNKNOWN" property="houseUserId" />-->
+    <!--<result column="house_cost" jdbcType="UNKNOWN" property="houseCost" />-->
+    <!--<result column="house_area" jdbcType="UNKNOWN" property="houseArea" />-->
+    <!--<result column="house_title" jdbcType="VARCHAR" property="houseTitle" />-->
+    <!--<result column="house_address" jdbcType="VARCHAR" property="houseAddress" />-->
+    <!--<result column="address_detail" jdbcType="VARCHAR" property="addressDetail" />-->
+    <!--<result column="address_zone" jdbcType="VARCHAR" property="addressZone" />-->
+    <!--<result column="house_type" jdbcType="VARCHAR" property="houseType" />-->
+    <!--<result column="house_picture_url" jdbcType="VARCHAR" property="housePictureUrl" />-->
+    <!--<result column="house_orientation" jdbcType="VARCHAR" property="houseOrientation" />-->
+    <!--<result column="house_decoration" jdbcType="VARCHAR" property="houseDecoration" />-->
+    <!--<result column="house_lease_type" jdbcType="VARCHAR" property="houseLeaseType" />-->
+    <!--<result column="furniture" jdbcType="UNKNOWN" property="furniture" />-->
+    <!--<result column="house_desc" jdbcType="VARCHAR" property="houseDesc" />-->
+    <!--<result column="house_furniture" jdbcType="VARCHAR" property="houseFurniture" />-->
+    <!--<result column="house_release_time" jdbcType="DATE" property="houseReleaseTime" />-->
+    <!--<result column="include" jdbcType="UNKNOWN" property="include" />-->
+    <!--<result column="house_rent_include" jdbcType="VARCHAR" property="houseRentInclude" />-->
+    <!--<result column="house_require" jdbcType="VARCHAR" property="houseRequire" />-->
+    <!--<result column="require_p" jdbcType="UNKNOWN" property="requireP" />-->
+    <!--<result column="house_payment" jdbcType="VARCHAR" property="housePayment" />-->
+    <!--<result column="house_early_time" jdbcType="DATE" property="houseEarlyTime" />-->
+    <!--<result column="images" jdbcType="UNKNOWN" property="images" />-->
+  <!--</resultMap>-->
     <select id="getCurrentOrder" resultMap="BaseResultMap">
       select * from house_order order by house_release_time asc;
     </select>
@@ -56,9 +91,9 @@
       limit #{param2};
 
   </select>
-    <select id="getRecomOrder" resultMap="OrderMap">
+    <select id="getRecomOrder" resultType="com.house.demo.model.vo.OrderVo">
 
-      select house_id,house_area,house_cost,house_address,house_decoration,house_picture_url,house_title,house_user.user_name from house_order
+      select house_id,house_cost,house_title, house_address, house_release_time,house_orientation,house_lease_type, house_picture_url,house_area,house_decoration,house_desc,house_furniture, house_type, house_orientation, house_area, user_name,user_tel,user_last_login_time from house_order
 
       left join house_user on house_user_id = user_id
 
@@ -67,11 +102,171 @@
     </select>
   <select id="getOrderById" resultType="com.house.demo.model.vo.OrderVo">
 
-    select house_id,house_cost,house_orientation,house_lease_type, house_picture_url,house_area,house_decoration,house_desc,house_furniture, house_type, house_orientation, house_area, user_name,user_tel,user_last_login_time
+    select house_id,house_user_id,house_num, house_cost,house_title,house_early_time,house_payment, house_release_time ,user_nick_name,house_address, user_avatar, house_orientation,house_lease_type, house_picture_url,house_area,house_decoration,house_desc,house_furniture, house_type, house_orientation, house_area, user_name,user_tel,user_last_login_time,house_rent_include,house_require
 
     from house_order left join house_user on house_user_id = user_id
 
     where house_id = #{id};
+
+  </select>
+
+
+  <select id="getListByFactor" resultType="com.house.demo.model.vo.OrderVo">
+    select  house_id,house_cost,house_title, house_address,house_orientation,house_lease_type, house_picture_url,house_area,house_decoration,house_desc,house_furniture, house_type, house_orientation, house_area, user_name
+
+     from house_order left join house_user on house_user_id = user_id
+
+    <where>
+      <if test="houseAddress != null" >
+        <choose>
+          <when test="houseAddress=='不限'">
+
+          </when>
+          <otherwise>
+            house_address like '%${houseAddress}%'
+          </otherwise>
+        </choose>
+
+      </if>
+      <if test="houseCost != null">
+
+        <choose>
+
+          <when test="houseCost==0">
+
+          </when>
+          <when test="houseCost==1">
+            and house_cost between 0 and 500
+          </when>
+          <when test="houseCost==2">
+            and house_cost between 500 and 1000
+          </when>
+          <when test="houseCost==3">
+            and house_cost between 1000 and 1500
+          </when>
+          <when test="houseCost==4">
+            and house_cost between 1500 and 2000
+          </when>
+          <when test="houseCost==5">
+            and house_cost between 2000 and 3000
+          </when>
+          <when test="houseCost==6">
+            and house_cost between 3000 and 4500
+          </when>
+          <when test="houseCost==7">
+            and house_cost > 4500
+          </when>
+        </choose>
+
+
+      </if>
+      <if test="houseDecoration != null">
+
+        <choose>
+          <when test="houseDecoration=='装修不限'">
+
+          </when>
+          <otherwise>
+            and house_decoration = #{houseDecoration}
+          </otherwise>
+        </choose>
+
+
+      </if>
+      <if test="houseLeaseType != null">
+
+        <choose>
+          <when test="houseLeaseType==0"></when>
+          <when test="houseLeaseType==1">
+            and house_lease_type = '整套出租'
+          </when>
+          <when test="houseLeaseType==2">
+            and house_lease_type = '单间出租'
+          </when>
+
+        </choose>
+
+      </if>
+      <if test="houseOrientation != null">
+        <choose>
+          <when test="houseOrientation=='朝向不限'">
+
+          </when>
+          <otherwise>
+            and house_orientation = #{houseOrientation}
+          </otherwise>
+
+        </choose>
+
+      </if>
+
+      <if test="houseType != null">
+        <choose>
+          <when test="houseType==0">
+
+          </when>
+          <when test="houseType==1">
+            and house_type like '%1室%'
+          </when>
+          <when test="houseType==2">
+            and house_type like '%2室%'
+          </when>
+          <when test="houseType==3">
+            and house_type like '%3室%'
+          </when>
+          <when test="houseType==4">
+            and house_type like '%4室%'
+          </when>
+          <when test="houseType==5">
+            and house_type not like '%1室%' and house_type not like '%2室%' and house_type not like '%3室%' and house_type not like '%4室%'
+          </when>
+        </choose>
+
+      </if>
+
+    </where>
+
+    order by house_release_time desc
+
+    limit 10
+
+
+  </select>
+  <select id="getMyOrder" resultType="com.house.demo.model.vo.OrderVo">
+
+    select house_id,house_title,house_address,house_cost,house_release_time,house_user_id from house_order where house_user_id = #{id}
+
+    limit 10
+  </select>
+
+    <insert id="setUrl">
+        insert into house_order_pic_url values(#{id},#{urls})
+    </insert>
+    <delete id="delUrl">
+
+        delete from house_order_pic_url where order_id = #{id}
+    </delete>
+
+  <select id="getUrls" resultType="java.lang.String">
+
+    select  url from house_order_pic_url where order_id = #{id}
+  </select>
+
+  <select id="searchByKeyWord" resultType="com.house.demo.model.vo.OrderVo" >
+
+    select * from house_order where house_address like '%${key}%'
+
+    union distinct
+
+    select * from house_order where house_title like '%${key}%'
+
+    union distinct
+
+    select * from house_order where house_orientation like  '%${key}%'
+
+    union distinct
+
+    select * from house_order where house_rent_include like '%${key}%'
 
   </select>
 

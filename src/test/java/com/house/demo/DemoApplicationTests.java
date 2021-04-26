@@ -62,7 +62,7 @@ class DemoApplicationTests {
         order.setHouseUserId(5);
         order.setHouseType("类型");
 
-        orderService.createHouseOrder(order);
+
     }
 
 }

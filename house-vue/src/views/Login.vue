@@ -18,10 +18,10 @@
       </div>
       <br>
       <el-form-item  prop="username" v-show="!isactive2" style="margin-left:-13%">
-        <el-input type="text" @change="confirmif1" placeholder="请输入账号" v-model="form.username"/>
+        <el-input type="text" placeholder="请输入账号" v-model="form.username"/>
       </el-form-item>
       <el-form-item  prop="tel" v-show="isactive2" style="margin-left:-13%">
-        <el-input @change="confirmif2" type="text" placeholder="请输入手机号" v-model="form.tel">
+        <el-input  type="text" placeholder="请输入手机号" v-model="form.tel">
           <el-button v-show='disa' ref="sendmsgb"  style="padding-right:10px" slot="suffix" type="text" @click="sendMessage()" >
            发送验证码
           </el-button> 
@@ -56,6 +56,9 @@
 </template>
 
 <script>
+
+
+
   export default {
     name: "Login",
     data() {
@@ -116,6 +119,7 @@
             var formdata = new FormData();
             formdata.append('userName',this.form.username);
             formdata.append('userPassword',this.form.password);
+
             this.axios.post(
                 'http://localhost:8081/user/login',
                 formdata
@@ -123,10 +127,29 @@
             .then((res)=>{
               
               if(res.data.code==200){
-                localStorage.setItem(this.form.userName,res.data.data);
+                if(this.checked == true){
+                 
+                  this.$cookies.set('userName',this.form.username,"7d");
+                  this.$cookies.set('passWord',this.form.password,"7d");
+
+                }
+                localStorage.setItem(this.form.username,res.data.data);
+                sessionStorage.setItem('username',this.form.username);
+                
+                this.$notify({
+                  title: '成功',
+                  message: '登录成功',
+                  type: 'success'
+                });
                 this.$router.push("/index");
+
               }else{
-                alert(res.data.msg);
+                this.$message({
+                  type: 'error',
+                  message:'登录密码或账号错误！'
+                })
+                this.form.password = '';
+
               }
               
             })
@@ -147,6 +170,7 @@
               
               if(res.data.code==200){
                 localStorage.setItem(this.form.userName,res.data.data);
+              
                 this.$router.push("/index");
               }else{
                  alert(res.data.msg);
@@ -209,6 +233,14 @@
 
 
     
+    },created(){
+
+      if(this.$cookies.get('userName')!=null || this.$cookies.get('userName')!=undefined){
+        this.form.username = this.$cookies.get('userName');
+        this.form.password = this.$cookies.get('passWord');
+        this.checked = true;
+      }
+
     }
     
   }
