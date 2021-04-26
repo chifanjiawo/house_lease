@@ -9,7 +9,10 @@ import 'element-ui/lib/theme-chalk/index.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import moment from 'moment'
-
+import global from './components/LocalGlobal'
+import VueCookies from 'vue-cookies'
+Vue.prototype.Global = global;
+Vue.use(VueCookies)
 Vue.use(VueAxios,axios);
 
 Vue.use(ElementUI);

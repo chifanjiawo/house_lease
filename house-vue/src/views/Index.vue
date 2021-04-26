@@ -11,8 +11,8 @@
                 租房
             </router-link>
             </span>
-        <span class="na">二手市场</span>
-        <span class="na" >关于我们</span>
+        <!-- <span class="na">二手市场</span>
+        <span class="na" >关于我们</span> -->
 
         </div>
     <div class="main">
@@ -24,16 +24,18 @@
                 <div class="up">
                 <span  style="color:#67C23A">热门区域</span>
                 <div style="margin-top:20px">
-                    <el-link  v-for="item in areaList" :underline="false" :key="item.id" style="margin-left:10px">
-                        {{item.area}}
+                    
+                    <el-link @click="toSearchWithAddress(index)" v-for="(item,index) in zone.area" :underline="false" :key="index" style="margin-left:10px">
+                        {{item.fullname}}
                     </el-link>
+                    
                 </div>
                 </div>
                 <div class="line"/>
                 <div class="down">
                  <span style="color:#67C23A" >租房预算</span>
                  <div style="margin-top:20px">
-                     <el-link style="margin-left:10px" :underline="false" v-for="item in costList" :key="item.id">
+                     <el-link @click="toSearchWithCost(item.id)" style="margin-left:10px" :underline="false" v-for="item in costList" :key="item.id">
                         {{item.cost}}
                      </el-link>
                  </div>
@@ -59,28 +61,27 @@
         </div>
         <div style="margin-left:30px;margin-top:10px;width:1300px;">
             <a class="a1" @mouseover="mouseover(index)" @mouseleave="mouseleave(index)"  v-for="(item,index) in recom" :key="index" @click="todesc(item.houseId)" >
-                <img :src="item.housePictureUrl" style="width:100%;height:200px"/>
+                <img :src="item.images[0]" style="width:100%;height:200px"/>
                 <div style="background-color: #67C23A;color: #FFFFFF;margin-top:-5px;font-size:13px">
                     <span >{{item.houseTitle}}</span>
-                    <span style="margin-left:80px">{{item.houseCost}}/月</span>
+                    
                 </div>
                 <div style="padding-top:5px;font-size:13px">
-                    <span ref="s1" >{{item.houseAddress}}</span>
+                    <span ref="s1" >{{item.houseArea}}㎡</span>
+                    <span ref="s3" style="margin-left:120px ">{{item.houseCost}}/月</span>
                 </div>
                 <div style="padding-top:5px;font-size:13px">
-                    <span ref="s2">{{item.houseType}}</span>
+                    <span ref="s2">{{item.houseDecoration}}</span>
                 </div>
 
             </a>
-
-
             <!-- <span v-for='item in recom' :key="item.id">{{item.id}}</span> -->
         </div>
-        <div style="padding:20px;margin-top:25px;marin-bottom:25px;">
+        <!-- <div style="padding:20px;margin-top:25px;marin-bottom:25px;">
             <span style="font-size:30px;color:#67C23A">房屋类型</span>
              <div class="line"></div>
-        </div>
-        <div style="width:1300px">
+        </div> -->
+        <!-- <div style="width:1300px">
             <ul style="list-style-type: none;" >
                 <li style="float:left;margin-left:40px">
                     <div style="position:absolute;">
@@ -149,7 +150,7 @@
                     </a>
                 </li>
             </ul>
-        </div>
+        </div> -->
     </div>
     </div>
 
@@ -182,44 +183,23 @@
                     // {id:2,idview:require('../assets/7.jpeg')},
 
                 ],
-                areaList:[
-                    {id:0,area:'蓬江'},
-                    {id:1,area:'新会'},
-                    {id:2,area:'江海'},
-                    {id:3,area:'开平市'},
-                    {id:4,area:'鹤山市'},
-                    {id:5,area:'恩平市'}
-                ],
+                
                 costList:[
-                    {id:0,cost:'500元以下'},
-                    {id:1,cost:'500元-800元'},
-                    {id:2,cost:'800元-1000元'},
+                    {id:0,cost:'不限'},
+                    {id:1,cost:'500元以下'},
+                    {id:2,cost:'500元-1000元'},
                     {id:3,cost:'1000元-1500元'},
-                    {id:0,cost:'1500-2000元'},
+                    {id:4,cost:'1500元-2000元'},
+                    {id:5,cost:'2000-3000元'},
                 ],
                 recom:[
-                    // {id:0,tilte:'五邑大学11-502',cost:"1000元/月",area:'江门',desc:'精装房',},
-                    // {id:1,tilte:'五邑大学11-502',cost:"1000元/月",area:'江门',desc:'精装房', },
-                    // {id:2,tilte:'五邑大学11-502',cost:"1000元/月",area:'江门',desc:'精装房', },
-                    // {id:3,tilte:'五邑大学11-502',cost:"1000元/月",area:'江门',desc:'精装房', },
-                    // {id:4,tilte:'五邑大学11-502',cost:"1000元/月",area:'江门',desc:'精装房', },
-                    // {id:5,tilte:'五邑大学11-502',cost:"1000元/月",area:'江门',desc:'精装房', },
-                    // {id:6,tilte:'五邑大学11-502',cost:"1000元/月",area:'江门',desc:'精装房', },
-                    // {id:7,tilte:'五邑大学11-502',cost:"1000元/月",area:'江门',desc:'精装房'},
-                    //  {
-                    //     "houseId": 11408642048,
-                    //     "userName": "xiao",
-                    //     "houseCost": 1000,
-                    //     "houseArea": 200,
-                    //     "title": "大学宿舍",
-                    //     "houseAddress": "广东",
-                    //     "houseType": "类型",
-                    //     "url": require("../assets/8.jpeg")
-                    // },
+                
                 ],
-                
-                
-
+                myIp:'',
+                zone:{
+                    city:'',
+                    area:[]
+                }
 
             }
         },
@@ -227,25 +207,115 @@
             test(){
                 alert("test");
             },
+            toSearchWithAddress(id){
+                this.$router.push({
+                    path:'/search',
+                    query:{
+                      houseCost:0,
+                      houseType:0,
+                      houseLeaseType:0,
+                      houseDecoration:'装修不限',
+                      houseOrientation:'朝向不限',
+                      houseAddress:this.zone.area[id].fullname,
+                      active:id
+                    }
+                })
+            },
+            toSearchWithCost(id){
+                this.$router.push({
+                    path:'/search',
+                    query:{
+                      houseCost:id,
+                      houseType:0,
+                      houseLeaseType:0,
+                      houseDecoration:'装修不限',
+                      houseOrientation:'朝向不限',
+                      houseAddress:'不限'
+                    }
+                })
+            },
+
+            // getIP(){
+            //     this.axios.get(
+            //       '/ipapi'
+            //     )
+            //     .then((res)=>{
+            //         this.myIp = res.data;
+                    
+            //         this.getCity();
+            //     })
+            //     .catch((error)=>{
+            //         alert(JSON.stringify(error));
+            //     })
+               
+            // },
+            // getCity(){
+                 
+                
+                
+            //     this.axios.get(
+                    
+            //         '/localapi/location/v1/ip?ip='+ this.myIp +'&key=W4JBZ-GM2CG-WL5QI-IXRPZ-II4E7-NDFDH'
+            //     ).then((res)=>{
+            //        this.zone.city =  res.data.result.ad_info.city;
+            //        sessionStorage.setItem('city',this.zone.city);
+                   
+            //         var url = '/localapi/district/v1/search?&keyword='+this.zone.city+'&key=W4JBZ-GM2CG-WL5QI-IXRPZ-II4E7-NDFDH';
+                    
+            //        this.axios.get(
+            //            url
+            //        )
+            //        .then((res)=>{
+
+            //            this.axios.get(
+            //                '/localapi/district/v1/getchildren?id='+ res.data.result[0][0].id + '&key=W4JBZ-GM2CG-WL5QI-IXRPZ-II4E7-NDFDH'
+            //            )
+            //            .then((res)=>{
+            //                this.zone.area = res.data.result[0];
+            //                this.Global.ip = this.myIp;
+            //                this.Global.zone = this.zone;
+            //                this.Global.zone.area.unshift({'fullname':'不限'});
+            //            })
+            //            .catch((error)=>{
+            //                alert('3连接出错');
+            //            })
+
+                       
+            //        })
+            //        .catch((error)=>{
+            //            alert('1'+JSON.stringify (error));
+            //        })
+
+            //     }).catch((error)=>{
+            //         alert('2'+JSON.stringify (error));
+            //     })
+            // },
+
+
             mouseover(id){
                 this.$refs.s1[id].style.color = " #67C23A";
                 this.$refs.s2[id].style.color = " #67C23A";
-                
+                this.$refs.s3[id].style.color = " #67C23A";
             },
             mouseleave(id){
                this.$refs.s1[id].style.color = "#303133";
                this.$refs.s2[id].style.color = "#303133";
+               this.$refs.s3[id].style.color = "#303133";
             },
+
             initData(){
+                
+                
+                
 
                 this.axios.get(
                     'http://localhost:8081/house/getRecom'
                 ).then((res)=>{
-                    this.recom =  res.data.data;
+                    this.recom = res.data.data;
                     
                      
                 }).catch((error)=>{
-                    alert("连接出错");
+                    alert("获取推荐房源失败");
                 })
             },
             todesc(id){
@@ -255,13 +325,42 @@
                        query:{
                            orderId: id
                        }
+                       
                    }
                 );
             }
         },
         created(){
              this.initData();
-        }
+            //  this.getIP();
+            setTimeout(() => {
+                this.zone = this.Global.zone
+           
+            },1500)
+             
+        },
+        mounted(){
+            
+            
+        },
+        // watch:{
+        //     Global:{
+        //         handler(){
+        //             if(this.Global.zone.area!=undefined && this.Global.zone.area.length!=0){
+        //                  this.zone = this.Global.zone
+        //             }
+                   
+        //             console.log(this.zone)
+        //             console.log("Global值改变了")
+        //         },
+        //         immediate: true,
+        //         deep:true
+        //     }
+        // }
+        
+        
+        
+        
     }
 </script>
 
@@ -292,7 +391,8 @@
     margin-left: 30%;
 } */
 .main{
-    height:1500px;
+    /* height:1500px; */
+    margin-bottom: 30px;
 }
 
 span{

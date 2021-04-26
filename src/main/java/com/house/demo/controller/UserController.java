@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.List;
 
 /**
@@ -37,7 +38,8 @@ public class UserController {
 
 
     @PutMapping("update")
-    public String userUpdate(HouseUser user) {
+    public String userUpdate(@RequestBody HouseUser user) {
+        System.out.println(user.getUserId());
         int i = userService.updateUserById(user);
         if (i  != 0) {
             return JSONObject.toJSONString(MyResult.succ("用户信息修改成功"));
@@ -46,14 +48,14 @@ public class UserController {
         }
     }
 
-    @GetMapping("star/{id}")
-    public String getMyStar(@PathVariable("id")int id ){
-
-        List<HouseOrder> list = userService.getUserStar(id);
-
-        return JSONObject.toJSONString(list);
-
-    }
+//    @GetMapping("star/{id}")
+//    public String getMyStar(@PathVariable("id")int id ){
+//
+//        List<HouseOrder> list = userService.getUserStar(id);
+//
+//        return JSONObject.toJSONString(list);
+//
+//    }
 
     @GetMapping("release/{current}")
     public String getMyRelease(@PathVariable("current")int current,@RequestParam("userId") int id){
@@ -72,32 +74,28 @@ public class UserController {
 
     }
 
-    @GetMapping("myinfo/{id}")
-    public String getMyInfo(@PathVariable("id")int id){
+    @GetMapping("myinfo")
+    public HouseUser getMyInfo(@RequestParam("userName") String name){
 
-        HouseUser one = userService.getOne(
-                new QueryWrapper<HouseUser>()
-                        .eq("userId", id)
+        HouseUser one = userService.getUserByName(name);
+        one.setUserPassword(null);
 
-        );
-        one.setUserPassword("");
-
-        return JSONObject.toJSONString(one);
+        return one;
     }
 
 
 
     @PutMapping("updatepass")
-    public String updatepass(HttpServletRequest request, String pass){
+    public String updatepass(HttpServletRequest request,@RequestParam("oldPass")String oldPass,@RequestParam("newPass")String newPass){
 
         String token = request.getHeader("token");
 
-        int i = userService.updatePassWord(token,pass);
+        int i = userService.updatePassWord(token,oldPass,newPass);
 
         if (i != 0) {
             return JSONObject.toJSONString(MyResult.succ("用户信息修改成功"));
         } else {
-            return JSONObject.toJSONString(MyResult.succ("用户信息修改失败"));
+            return JSONObject.toJSONString(MyResult.fail("用户信息修改失败"));
         }
 
     }
@@ -115,6 +113,9 @@ public class UserController {
 
         }
     }
+
+
+
 
 
 

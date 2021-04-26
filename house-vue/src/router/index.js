@@ -8,10 +8,16 @@ import { Header } from 'element-ui'
 import MyHeader from '@/components/Header'
 import searchList from '@/views/SearchList'
 import desc from '@/views/Housedesc'
+import userInfo from '@/views/userInfo'
+import myOrderList from '@/components/OrderLsit'
+import myStar from '@/components/myStar'
+import personInfo from '@/components/personInfo'
+import updatePass from '@/components/Updatepass'
+import myComment from '@/components/myComment'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     {
@@ -49,7 +55,52 @@ export default new Router({
       path: '/houseorder',
       name: 'desc',
       component: desc
+    },
+    {
+      path:'/userInfo',
+      name:'userInfo',
+      component:userInfo,
+      children:[
+        {
+          path:"myOrderList",
+          component:myOrderList
+        },{
+          path:'myStar',
+          component:myStar
+        },{
+          path:'personInfo',
+          component:personInfo
+        },{
+          path:'updatePass',
+          component:updatePass
+        },{
+          path:'myComment',
+          component:myComment
+        }
+      ]
     }
 
   ]
 })
+// 路由守卫
+router.beforeEach((to,from,next) => {
+ 
+  var name  =  sessionStorage.getItem('username');
+
+  var isLogin =false;
+
+  if(name!=null){
+    isLogin = true;
+  }
+  var rex = /\/userInfo*/
+   
+
+  if(rex.test(to.path)){
+    isLogin ? next() : next('/login');
+  }else{
+    next();
+  }
+}
+)
+
+export default router;

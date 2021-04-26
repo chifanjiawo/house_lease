@@ -41,6 +41,8 @@ public class HouseComment implements Serializable {
     @TableField(value = "comment_create_time")
     private Date commentCreateTime;
 
+
+
     public static final String COL_COMMENT_ID = "comment_id";
 
     public static final String COL_COMMENT_PID = "comment_pid";

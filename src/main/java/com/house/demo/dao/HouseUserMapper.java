@@ -1,11 +1,10 @@
 package com.house.demo.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.house.demo.model.HouseOrder;
-import com.house.demo.model.HouseUser;
-import com.house.demo.model.vo.UserVo;
-import org.apache.ibatis.annotations.Param;import java.util.Date;
-import java.util.List;
+import com.house.demo.model.HouseUser;import com.house.demo.model.vo.UserVo;import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Date;
 
 /**
  * @author xjj
@@ -22,4 +21,6 @@ public interface HouseUserMapper extends BaseMapper<HouseUser> {
     HouseUser getUserNameByTel(String tel);
 
     UserVo getUserById(String id);
+
+    int setUserAvatar(@Param("id")int id ,@Param("avatarUrl") String avatarUrl);
 }

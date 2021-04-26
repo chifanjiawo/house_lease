@@ -6,6 +6,7 @@
     <!--@Table house_user-->
     <id column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_nick_name" jdbcType="VARCHAR" property="userNickName" />
     <result column="user_password" jdbcType="VARCHAR" property="userPassword" />
     <result column="user_last_login_time" jdbcType="TIMESTAMP" property="userLastLoginTime" />
     <result column="user_tel" jdbcType="VARCHAR" property="userTel" />
@@ -15,17 +16,17 @@
     <result column="user_role" jdbcType="VARCHAR" property="userRole" />
     <result column="user_ban_status" jdbcType="TINYINT" property="userBanStatus" />
   </resultMap>
-  <resultMap id="userMap" type="com.house.demo.model.HouseUser">
-    <id column="user_id" property="userId"/>
-    <result column="user_name" property="userName"/>
-    <result column="user_password" property="userPassword"/>
-
-  </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    user_id, user_name, user_password, user_last_login_time, user_tel, user_email, user_avatar, 
-    user_register_time, user_role, user_ban_status
+    user_id, user_name, user_nick_name, user_password, user_last_login_time, user_tel, 
+    user_email, user_avatar, user_register_time, user_role, user_ban_status
   </sql>
+  <resultMap id="userMap" type="com.house.demo.model.HouseUser">
+    <id column="user_id" property="userId" />
+    <result column="user_name" property="userName" />
+    <result column="user_password" property="userPassword" />
+
+  </resultMap>
     <select id="getUserByName" parameterType="java.lang.String" resultType="com.house.demo.model.HouseUser">
       select * from house_user where user_name = #{name};
     </select>
@@ -60,9 +61,14 @@
   </select>
     <select id="getUserById" resultType="com.house.demo.model.vo.UserVo">
 
-      select user_id,user_name,user_tel,user_last_login_time,user_avatar from house_user where user_id = #{id};
+      select user_id,user_name,user_tel,user_last_login_time,user_avatar,user_nick_name from house_user where user_id = #{id};
 
     </select>
+    <update id="setUserAvatar">
+
+      update house_user set user_avatar = #{avatarUrl} where user_id = #{id}
+
+    </update>
 
 
 </mapper>
